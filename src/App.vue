@@ -1,30 +1,38 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">A</router-link>
-  </div>
-  <router-view />
+  <PageHome/>
 </template>
 
+<script>
+import PageHome from "@/views/PageHome.vue"
+export default {
+  name: "App",
+  components: {PageHome},
+  props: {},
+  data() {},
+  computed: {},
+  watch: {},
+  mounted() {},
+  methods: {},
+};
+</script>
+
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+@import url("./Grid.scss");
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&family=Space+Mono:ital@1&display=swap');
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+border: none;
+outline: none;
+text-decoration: none;
+text-transform: capitalize;
+transition: all .2s linear;
+font-family: 'Nunito', sans-serif;
+font-family: 'Space Mono', monospace;
+}
+html,body{
+  height: auto;
 }
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
 </style>
