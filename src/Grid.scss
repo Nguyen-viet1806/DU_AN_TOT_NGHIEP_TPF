@@ -16,6 +16,12 @@
     margin-right: -4px;
 }
 
+.vrow.nowrap{
+    display: flex;
+    flex-wrap: nowrap;
+    margin-left: -4px;
+    margin-right: -4px;
+}
 .vrow.no-gutters {
     margin-left: 0;
     margin-right: 0;

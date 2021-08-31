@@ -31,6 +31,9 @@ transition: all .2s linear;
 font-family: 'Nunito', sans-serif;
 font-family: 'Space Mono', monospace;
 }
+p{
+  margin: 0;
+}
 html,body{
   height: auto;
 }

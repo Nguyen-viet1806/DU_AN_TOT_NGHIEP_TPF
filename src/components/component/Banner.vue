@@ -4,9 +4,6 @@
     <p class="banner-info-small">Vẻ đẹp của bạn để chúng tôi lo</p>
     <p><button class="banner-btn-paynow">Mua ngay</button></p>
   </div>
-  <div>
-    <button>sádasdasd</button>
-  </div>
 </template>
 
 <script>
@@ -40,10 +37,12 @@ export default {
     font-size: 80px;
     font-weight: 600;
     letter-spacing: 1px;
+    animation: textBanner ease-in 1s ;
   }
   &-info-small {
     font-size: 20px;
     font-weight: 500;
+    animation: textBanner ease-in 1s ;
   }
   &-btn-paynow {
     cursor: pointer;
@@ -94,6 +93,22 @@ export default {
       height: 40px;
       border-radius: 80px;
     }
+  }
+}
+
+@keyframes textBanner {
+  0%{
+    opacity: 0;
+    transform: translate(0,-100px);
+  }
+
+  80%{
+    transform: translate(0,-20px);
+  }
+
+  100%{
+    opacity: 1;
+    transform: translate(0,0);
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar">
+  <div class="navbar" id="scoll-navbar">
     <div class="navbar-icons">
       <a href="#" class="navbar-icons-logo"
         ><fa :icon="['fab', 'facebook']"
@@ -12,18 +12,20 @@
       /></a>
       <a href="#" class="navbar-icons-logo"><fa :icon="['fab', 'github']" /></a>
       <a href="#home" class="navbar-icons-logo" id="logo-main"
-        ><fa style="font-size: 35px;" :icon="['fas', 'carrot']"
+        ><fa :icon="['fas', 'carrot']"
       /></a>
     </div>
 
     <nav class="navbar-menu" id="menu-bars">
-      <a href="#home">home</a>
-      <a href="#home">home</a>
-      <a href="#home">home</a>
-      <a href="#home" id="logo"><fa style="font-size: 35px;" :icon="['fas', 'carrot']" /></a>
-      <a href="#home">home</a>
-      <a href="#home">home</a>
-      <a href="#home">home</a>
+      <a class="menu-left" href="#home">home</a>
+      <a class="menu-left" href="#home">home</a>
+      <a class="menu-left" href="#home">home</a>
+      <a href="#home" id="logo"
+        ><fa style="font-size: 35px" :icon="['fas', 'carrot']"
+      /></a>
+      <a class="menu-right" href="#home">home</a>
+      <a class="menu-right" href="#home">home</a>
+      <a class="menu-right" href="#home">home</a>
     </nav>
 
     <div class="navbar-icons-main">
@@ -47,6 +49,20 @@
 </template>
 
 <script>
+window.onscroll = function () {
+  setBackground();
+};
+function setBackground() {
+  var scollNarbar = document.getElementById("scoll-navbar");
+
+  if (document.documentElement.scrollTop > 28 || document.body.scrollTop > 28) {
+    scollNarbar.style.background = "white";
+    scollNarbar.style.color = "black";
+  } else {
+    scollNarbar.style.background = "transparent";
+    scollNarbar.style.color = "white";
+  }
+}
 export default {
   name: "Navbar",
   components: {},
@@ -78,6 +94,7 @@ export default {
   width: 100%;
   height: 95px;
   background: transparent;
+  color: white;
   & a:hover {
     color: #7d7d7d;
   }
@@ -88,7 +105,7 @@ export default {
     &-logo {
       line-height: 95px;
       padding: 0 10px 0 10px;
-      color: white;
+      color: inherit;
     }
   }
 
@@ -96,34 +113,42 @@ export default {
     &-logo {
       line-height: 95px;
       padding: 0 10px 0 10px;
-      color: white;
+      color: inherit;
     }
     & #icons-bars {
       display: none;
-      
     }
   }
   & .active {
-   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
   }
   &-menu {
     & a {
+      width: 100%;
+      text-decoration: none;
       padding: 0 10px 0 10px;
-      color: white;
+      color: inherit;
       font-weight: bold;
+    }
+    & .menu-left {
+      animation: menuLeft ease-in 2s;
+    }
+    & .menu-right {
+      animation: menuRight ease-in 2s;
     }
   }
 }
 
 @media (max-width: 800px) {
   .navbar {
-    background:rgba(255,255,255,0.2);
+    padding: 0 15px 0 25px;
+    background: rgba(255, 255, 255, 0.2);
     &-menu {
       position: absolute;
       top: 100%;
       left: 0;
       right: 0;
-      background:rgba(255,255,255,0.2);
+      background: rgba(255, 255, 255, 0.2);
       border-top: 0.2px solid rgba(0, 0, 0, 0.2);
       border-bottom: 0.2px solid rgba(0, 0, 0, 0.2);
       clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
@@ -141,6 +166,7 @@ export default {
 
     &-icons {
       & #logo-main {
+        font-size: 30px;
         display: inline-block;
       }
       &-logo {
@@ -152,6 +178,43 @@ export default {
         display: inline-block;
       }
     }
+  }
+}
+.scollNarbar {
+  background: red !important;
+}
+
+@keyframes menuLeft {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes menuRight {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
   }
 }
 </style>
