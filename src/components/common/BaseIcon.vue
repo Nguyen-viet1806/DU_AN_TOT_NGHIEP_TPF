@@ -1,5 +1,5 @@
 <template>
-  <svg viewBox="0 0 700 500" width="260" height="86"> 
+  <svg v-on:click="test2" viewBox="0 0 700 500" width="260" height="86">
     <defs>
       <g id="bicycle">
         <svg viewBox="0 0 100 60" x="-75" y="-45" width="150" height="90">
@@ -96,7 +96,18 @@ export default {
   computed: {},
   watch: {},
   mounted() {},
-  methods: {},
+  methods: {
+    test1() {
+      let a = 0;
+      setTimeout((a = 7), 2000);
+      setTimeout( console.log("ádasd"), 5000);
+     
+      return a;
+    },
+    test2() {
+      console.log(this.test1());
+    },
+  },
 };
 </script>
 

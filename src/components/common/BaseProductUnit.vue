@@ -112,6 +112,7 @@ export default {
   display: flex;
   padding: 0 2% 0 2%;
   & .name-product {
+    cursor: pointer;
     font-weight: 500;
     text-decoration: none;
     margin-left: 5px;

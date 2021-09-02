@@ -1,50 +1,62 @@
 <template>
-  <div class="navbar" id="scoll-navbar">
-    <div class="navbar-icons">
-      <a href="#" class="navbar-icons-logo"
-        ><fa :icon="['fab', 'facebook']"
-      /></a>
-      <a href="#" class="navbar-icons-logo"
-        ><fa :icon="['fab', 'twitter']"
-      /></a>
-      <a href="#" class="navbar-icons-logo"
-        ><fa :icon="['fab', 'youtube']"
-      /></a>
-      <a href="#" class="navbar-icons-logo"><fa :icon="['fab', 'github']" /></a>
-      <a href="#home" class="navbar-icons-logo" id="logo-main"
-        ><fa :icon="['fas', 'carrot']"
-      /></a>
-    </div>
+  <div>
+    <div class="navbar" id="scoll-navbar">
+      <div class="navbar-icons">
+        <a href="#" class="navbar-icons-logo"
+          ><fa :icon="['fab', 'facebook']"
+        /></a>
+        <a href="#" class="navbar-icons-logo"
+          ><fa :icon="['fab', 'twitter']"
+        /></a>
+        <a href="#" class="navbar-icons-logo"
+          ><fa :icon="['fab', 'youtube']"
+        /></a>
+        <a href="#" class="navbar-icons-logo"
+          ><fa :icon="['fab', 'github']"
+        /></a>
+        <a href="#home" class="navbar-icons-logo" id="logo-main"
+          ><fa :icon="['fas', 'carrot']"
+        /></a>
+      </div>
 
-    <nav class="navbar-menu" id="menu-bars">
-      <a class="menu-left" href="#home">home</a>
-      <a class="menu-left" href="#home">home</a>
-      <a class="menu-left" href="#home">home</a>
-      <a href="#home" id="logo"
-        ><fa style="font-size: 35px" :icon="['fas', 'carrot']"
-      /></a>
-      <a class="menu-right" href="#home">home</a>
-      <a class="menu-right" href="#home">home</a>
-      <a class="menu-right" href="#home">home</a>
-    </nav>
+      <nav class="navbar-menu" id="menu-bars">
+        <router-link v-on:click="setscoll" to="/" class="menu-left">Home</router-link>
+        <a class="menu-left" href="#home">home</a>
+        <router-link v-on:click="setscoll" to="/news" class="menu-left" href="#home"
+          >News</router-link
+        >
+        <a href="#home" id="logo"
+          ><fa style="font-size: 35px" :icon="['fas', 'carrot']"
+        /></a>
+        <a class="menu-right" href="#home">home</a>
+        <a class="menu-right" href="#home">home</a>
+        <a class="menu-right" href="#home">home</a>
+      </nav>
 
-    <div class="navbar-icons-main">
-      <a href="#" class="navbar-icons-main-logo"
-        ><fa :icon="['fas', 'search']"
-      /></a>
-      <a href="#" class="navbar-icons-main-logo"
-        ><fa :icon="['fas', 'user-alt']"
-      /></a>
-      <a href="#" class="navbar-icons-main-logo"
-        ><fa :icon="['fas', 'heart']"
-      /></a>
-      <a href="#" class="navbar-icons-main-logo"
-        ><fa :icon="['fas', 'shopping-cart']"
-      /></a>
-      <a v-on:click="showMenuBar" class="navbar-icons-main-logo" id="icons-bars"
-        ><fa :icon="['fas', 'bars']" />
-      </a>
+      <div class="navbar-icons-main">
+        <a href="#" class="navbar-icons-main-logo"
+          ><fa :icon="['fas', 'search']"
+        /></a>
+        <a href="#" class="navbar-icons-main-logo"
+          ><fa :icon="['fas', 'user-alt']"
+        /></a>
+        <a href="#" class="navbar-icons-main-logo"
+          ><fa :icon="['fas', 'heart']"
+        /></a>
+        <a href="#" class="navbar-icons-main-logo"
+          ><fa :icon="['fas', 'shopping-cart']"
+        /></a>
+        <a
+          v-on:click="showMenuBar"
+          class="navbar-icons-main-logo"
+          id="icons-bars"
+          ><fa :icon="['fas', 'bars']" />
+        </a>
+      </div>
     </div>
+    <a href="#first-position">
+      <button class="btn-go-up"><fa :icon="['fas', 'angle-up']" /></button>
+    </a>
   </div>
 </template>
 
@@ -75,6 +87,10 @@ export default {
     showMenuBar() {
       let menuBar = document.querySelector("#menu-bars");
       menuBar.classList.toggle("active");
+    },
+    setscoll() {
+      document.documentElement.scrollTop = 900;
+      document.body.scrollTop = 0;
     },
   },
 };
@@ -138,6 +154,19 @@ export default {
     }
   }
 }
+.btn-go-up {
+  position: fixed;
+  top: 88%;
+  right: 2%;
+  z-index: 1000;
+  width: 50px;
+  height: 50px;
+  background: #0cb4ce;
+  color: white;
+  font-weight: bold;
+  font-size: 25px;
+  border-radius: 5px;
+}
 
 @media (max-width: 800px) {
   .navbar {
@@ -178,6 +207,10 @@ export default {
         display: inline-block;
       }
     }
+  }
+  .btn-go-up {
+    width: 30px;
+    height: 40px;
   }
 }
 .scollNarbar {
