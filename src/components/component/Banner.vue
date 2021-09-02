@@ -1,8 +1,8 @@
 <template>
-  <div class="banner">
+  <div class="banner" id="first-position">
     <h1 class="banner-info-title">Hãy đến với chúng tôi</h1>
     <p class="banner-info-small">Vẻ đẹp của bạn để chúng tôi lo</p>
-    <p><button class="banner-btn-paynow">Mua ngay</button></p>
+    <p><button class="banner-btn-paynow" >Mua ngay</button></p>
   </div>
 </template>
 
