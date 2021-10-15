@@ -23,7 +23,7 @@ export default {
 .banner {
   // height: 980px;
   padding: 400px 0 300px 0;
-  background-image: url("../../assets/img/banner.jpg");
+  background-image: url("../../../assets/img/banner.jpg");
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
@@ -74,7 +74,7 @@ export default {
 
 @media (max-width: 1135px) {
   .banner {
-    background-image: url("../../assets/img/banner-mobile.jpg");
+    background-image: url("../../../assets/img/banner-mobile.jpg");
     background-position-x: center;
   }
 }

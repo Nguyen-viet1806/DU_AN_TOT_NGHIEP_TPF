@@ -15,20 +15,18 @@
           ><fa :icon="['fab', 'github']"
         /></a>
         <a href="#home" class="navbar-icons-logo" id="logo-main"
-          ><fa :icon="['fas', 'carrot']"
-        /></a>
+          ><img class="icon" src="@/assets/logoTpf.svg" width="45" height="45"/></a>
       </div>
 
       <nav class="navbar-menu" id="menu-bars">
         <router-link v-on:click="setscoll" to="/" class="menu-left">Home</router-link>
-        <a class="menu-left" href="#home">home</a>
+        <router-link v-on:click="setscoll" to="/product" class="menu-left" href="#home">Product</router-link>
         <router-link v-on:click="setscoll" to="/news" class="menu-left" href="#home"
           >News</router-link
         >
         <a href="#home" id="logo"
-          ><fa style="font-size: 35px" :icon="['fas', 'carrot']"
-        /></a>
-        <a class="menu-right" href="#home">home</a>
+          ><img class="icon" src="@/assets/logoTpf.svg" width="45" height="45"/></a>
+        <router-link to="/product-detail" class="menu-right" href="#home">home</router-link>
         <a class="menu-right" href="#home">home</a>
         <a class="menu-right" href="#home">home</a>
       </nav>
@@ -61,6 +59,7 @@
 </template>
 
 <script>
+
 window.onscroll = function () {
   setBackground();
 };
@@ -75,6 +74,7 @@ function setBackground() {
     scollNarbar.style.color = "white";
   }
 }
+
 export default {
   name: "Navbar",
   components: {},

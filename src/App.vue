@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import Navbar from "@/components/component/Navbar.vue";
-import Banner from "@/components/component/Banner.vue";
+import Navbar from "@/components/component/componentsHeader/Navbar.vue";
+import Banner from "@/components/component/componentsHeader/Banner.vue";
 import Footer from "@/components/component/Footer.vue";
 export default {
   name: "App",
@@ -26,7 +26,7 @@ export default {
 <style lang="scss">
 @import url("./Grid.scss");
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300&family=Space+Mono:ital@1&display=swap");
-* {
+*{
   box-sizing: border-box;
   margin: 0;
   padding: 0;
