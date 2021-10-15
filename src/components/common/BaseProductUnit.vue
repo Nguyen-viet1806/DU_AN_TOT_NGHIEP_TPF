@@ -1,6 +1,6 @@
 <template>
-  <div >
-    <div v-if="isShowProduct" class="product-unit">
+  <div>
+    <div v-if="isShowProduct" v-on:click="test" class="product-unit">
       <div id="img-product" class="product-unit-img">
         <div class="favorite" v-on:click="onCickFavoriteProduct">
           <fa
@@ -16,7 +16,11 @@
         </div>
       </div>
       <p class="product-unit-name">Tobekind Varsity Jacket - Olive</p>
-      680.000đ
+      <p>680.000đ</p>
+      <p>
+        <fa class="person-favorite" :icon="['fas', 'heart']" /> Đã có 100 người
+        thích
+      </p>
     </div>
 
     <div v-if="isShowProductSmallFlowCategory" class="category-bottom-product">
@@ -36,8 +40,6 @@
 </template>
 
 <script>
-
-
 export default {
   name: "BaseProductUnit",
   components: {},
@@ -74,7 +76,24 @@ export default {
       imgProduct.style.backgroundImage =
         "url('../../assets/img/tobekind-varsity-jacket-pink-949779_1000x.jpg')";
     },
-    
+    test() {
+      // var a = {a: "ádasd"}
+      // var b = a
+      // b.a="123"
+      // console.log(a)
+      // console.log(a.a===b.a)
+      let person1 = { name: "Việt", skill: { coding: "Javascript" } };
+      let person2 = { ...person1 };
+      console.log(person1.skill === person2.skill); 
+      // person1.name = "ádadasdsa"
+      // console.log(person1.name); 
+      // console.log(person2.name); 
+      // console.log(person1=== person2); 
+      // person2.skill.coding =  "HTML";
+      // console.log(person1.skill); 
+      // console.log(person2.skill); 
+      // console.log(person1.skill === person2.skill); 
+    },
   },
 };
 </script>
@@ -82,7 +101,7 @@ export default {
 <style lang="scss" scoped>
 .product-unit {
   width: 100%;
-
+  margin-top: 50px;
   &-img {
     position: relative;
     cursor: pointer;
@@ -97,6 +116,8 @@ export default {
     }
 
     & .product-favorite {
+      font-size: 22px;
+      color: red;
       cursor: pointer;
       position: absolute;
       right: 2%;
@@ -106,6 +127,9 @@ export default {
   &-name {
     cursor: pointer;
   }
+}
+.person-favorite {
+  color: red;
 }
 .category-bottom-product {
   margin: 10px 0 10px 0;

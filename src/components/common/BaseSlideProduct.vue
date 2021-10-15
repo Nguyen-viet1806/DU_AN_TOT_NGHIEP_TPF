@@ -150,6 +150,7 @@ export default {
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Titan+One&display=swap");
+
 .wrapper {
   text-align: center;
   span {

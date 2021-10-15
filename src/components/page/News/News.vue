@@ -26,8 +26,8 @@
 
 <script>
 import BaseLatestNews from "@/components/common/BaseLatestNews.vue";
-import MainNews from "@/components/component/MainNews.vue";
-import DetailedNews from "@/components/component/DetailedNews.vue";
+import MainNews from "@/components/component/componentsNew/MainNews.vue";
+import DetailedNews from "@/components/component/componentsNew/DetailedNews.vue";
 import BaseCategoryBottom from "@/components/common/BaseCategoryBottom.vue";
 export default {
   name: "News",

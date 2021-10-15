@@ -39,7 +39,7 @@ export default {
     padding-top: 600px;
     width: 100%;
     height: 1100px;
-    background-image: url("../../assets/img/xxx_42.jpg");
+    background-image: url("../../../assets/img/xxx_42.jpg");
     background-position: center center;
     background-size: cover;
     text-align: center;
