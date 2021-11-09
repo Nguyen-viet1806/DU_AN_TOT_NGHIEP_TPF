@@ -3,6 +3,8 @@ import PageHome from "@/views/PageHome.vue";
 import PageNews from "@/views/PageNews.vue";
 import PageProduct from "@/views/PageProduct.vue";
 import PageProductDetail from "@/views/PageProductDetail.vue";
+import PageCard from "@/views/PageCard.vue";
+import PagePay from "@/views/PagePay.vue";
 const routes = [
   {
     path: "/",
@@ -23,6 +25,16 @@ const routes = [
     path: "/product-detail",
     name: "ProductDetail",
     component: PageProductDetail,
+  },
+  {
+    path: "/card",
+    name: "PageCard",
+    component: PageCard,
+  },
+  {
+    path: "/pay",
+    name: "PagePay",
+    component: PagePay,
   },
 ];
 

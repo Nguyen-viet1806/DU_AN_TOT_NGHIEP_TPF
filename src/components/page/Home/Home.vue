@@ -6,7 +6,6 @@
     <base-category-bottom />
     <base-news-bottom />
     <!-- <embed src="https://webcoban.vn/html/the-embed-trong-html.html"  width="500px" height="400px"/> -->
-    
   </section>
 </template>
 
@@ -34,8 +33,21 @@ export default {
   },
   computed: {},
   watch: {},
-  mounted() {},
-  methods: {},
+  mounted() {
+    this.initData();
+  },
+  methods: {
+    initData() {
+      this.getListProductHot();
+      this.getListProductNew();
+    },
+    getListProductHot() {
+      this.$store.dispatch("productModule/getListProductHot", { limit: 9 });
+    },
+    getListProductNew() {
+      this.$store.dispatch("productModule/getListProductNew", { limit: 3 });
+    },
+  },
 };
 </script>
 

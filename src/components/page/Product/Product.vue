@@ -6,8 +6,15 @@
         <hr />
       </h1>
       <div class="vrow">
-        <div class="vcol vl-3 vm-12 vc-12 filter"><filter-product /></div>
-        <div class="vcol vl-9 vm-12 vc-12"><product-all /></div>
+        <div class="vcol vl-3 vm-12 vc-12 filter">
+          <filter-product
+            @search="search"
+            @getProductParentFilter="getProductParentFilter"
+          />
+        </div>
+        <div class="vcol vl-9 vm-12 vc-12">
+          <product-all ref="productAll" @getProductParent="getProductParent" />
+        </div>
       </div>
     </div>
   </div>
@@ -23,8 +30,64 @@ export default {
   data() {},
   computed: {},
   watch: {},
-  mounted() {},
-  methods: {},
+  mounted() {
+    this.initData();
+  },
+  methods: {
+    initData() {
+      this.getProductParent();
+      this.getCategoryExists();
+    },
+
+    getCategoryExists() {
+      this.$store.dispatch("categoryModule/getDanhSachCategoryParentExists");
+    },
+
+    getProductParent() {
+      this.$refs["productAll"].isLoading = true;
+      let payload = {
+        page: this.$refs["productAll"].pageable,
+        limit: 9,
+      };
+      this.$store
+        .dispatch("productModule/getListProductParent", payload)
+        .then((res) => {
+          if (res) {
+            this.$refs["productAll"].isLoading = false;
+          }
+        });
+    },
+
+    search(name) {
+      this.$refs["productAll"].isLoading = true;
+      let payload = {
+        page: this.$refs["productAll"].pageable,
+        name: name,
+        limit: 9,
+      };
+      this.$store.dispatch("productModule/search", payload).then((res) => {
+        if (res) {
+          this.$refs["productAll"].isLoading = false;
+        }
+      });
+    },
+
+    getProductParentFilter(param) {
+      this.$refs["productAll"].isLoading = true;
+      let payload = {
+        ...param,
+        page: this.$refs["productAll"].pageable,
+        limit: 9,
+      };
+      this.$store
+        .dispatch("productModule/getListProductSort", payload)
+        .then((res) => {
+          if (res) {
+            this.$refs["productAll"].isLoading = false;
+          }
+        });
+    },
+  },
 };
 </script>
 

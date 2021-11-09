@@ -45,29 +45,15 @@
         <div class="carousel-item active">
           <div class="vgrid product-slide">
             <div class="vrow product-slide-body">
-              <div class="vcol vl-4 vm-4 vc-12">
-                <base-product-unit v-bind:isShowProduct="isShowProduct"/>
-              </div>
-              <div class="vcol vl-4 vm-4 vc-12">
-                <base-product-unit v-bind:isShowProduct="isShowProduct"/>
-              </div>
-              <div class="vcol vl-4 vm-4 vc-12">
-                <base-product-unit v-bind:isShowProduct="isShowProduct"/>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="vgrid product-slide">
-            <div class="vrow product-slide-body">
-              <div class="vcol vl-4 vm-4 vc-12">
-                <base-product-unit v-bind:isShowProduct="isShowProduct"/>
-              </div>
-              <div class="vcol vl-4 vm-4 vc-12">
-                <base-product-unit v-bind:isShowProduct="isShowProduct"/>
-              </div>
-              <div class="vcol vl-4 vm-4 vc-12">
-                <base-product-unit v-bind:isShowProduct="isShowProduct"/>
+              <div
+                v-for="product in listProductsHotOne"
+                :key="product"
+                class="vcol vl-4 vm-4 vc-12"
+              >
+                <base-product-unit
+                  :product="product"
+                  v-bind:isShowProduct="isShowProduct"
+                />
               </div>
             </div>
           </div>
@@ -75,14 +61,31 @@
         <div class="carousel-item">
           <div class="vgrid product-slide">
             <div class="vrow product-slide-body">
-              <div class="vcol vl-4 vm-4 vc-12">
-                <base-product-unit v-bind:isShowProduct="isShowProduct"/>
+              <div
+                v-for="product in listProductsHotTow"
+                :key="product"
+                class="vcol vl-4 vm-4 vc-12"
+              >
+                <base-product-unit
+                  :product="product"
+                  v-bind:isShowProduct="isShowProduct"
+                />
               </div>
-              <div class="vcol vl-4 vm-4 vc-12">
-                <base-product-unit v-bind:isShowProduct="isShowProduct"/>
-              </div>
-              <div class="vcol vl-4 vm-4 vc-12">
-                <base-product-unit v-bind:isShowProduct="isShowProduct"/>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="vgrid product-slide">
+            <div class="vrow product-slide-body">
+              <div
+                v-for="product in listProductsHotThree"
+                :key="product"
+                class="vcol vl-4 vm-4 vc-12"
+              >
+                <base-product-unit
+                  :product="product"
+                  v-bind:isShowProduct="isShowProduct"
+                />
               </div>
             </div>
           </div>
@@ -106,14 +109,15 @@
     <div v-if="isShowSlideProductNew" class="slide">
       <div class="vgrid product-slide">
         <div class="vrow product-slide-body">
-          <div class="vcol vl-4 vm-4 vc-12">
-            <base-product-unit v-bind:isShowProduct="isShowProduct"/>
-          </div>
-          <div class="vcol vl-4 vm-4 vc-12">
-            <base-product-unit v-bind:isShowProduct="isShowProduct"/>
-          </div>
-          <div class="vcol vl-4 vm-4 vc-12">
-            <base-product-unit v-bind:isShowProduct="isShowProduct"/>
+          <div
+            v-for="product in listProductsNewOne"
+            :key="product"
+            class="vcol vl-4 vm-4 vc-12"
+          >
+            <base-product-unit
+              :product="product"
+              v-bind:isShowProduct="isShowProduct"
+            />
           </div>
         </div>
       </div>
@@ -122,6 +126,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import BaseProductUnit from "@/components/common/BaseProductUnit.vue";
 export default {
   name: "BaseSlideProduct",
@@ -137,11 +142,107 @@ export default {
     },
   },
   data() {
-    return{
+    return {
       isShowProduct: true,
-    }
+    };
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      listProductsNew: "productModule/getListProductsNew",
+      listProductsHot: "productModule/getListProductsHot",
+    }),
+    listProductsNewOne: {
+      get: function () {
+        let listProduct = [];
+        if (this.listProductsNew) {
+          for (let i = 0; i < 3; i++) {
+            if (this.listProductsNew[i]) {
+              listProduct.push(this.listProductsNew[i]);
+            }
+          }
+          return listProduct;
+        }
+        return [];
+      },
+      set: () => {},
+    },
+    listProductsNewTow: {
+      get: function () {
+        let listProduct = [];
+        if (this.listProductsNew) {
+          for (let i = 3; i < 6; i++) {
+            if (this.listProductsNew[i]) {
+              listProduct.push(this.listProductsNew[i]);
+            }
+          }
+          return listProduct;
+        }
+        return [];
+      },
+      set: () => {},
+    },
+    listProductsNewThree: {
+      get: function () {
+        let listProduct = [];
+        if (this.listProductsNew) {
+          for (let i = 6; i < 9; i++) {
+            if (this.listProductsNew[i]) {
+              listProduct.push(this.listProductsNew[i]);
+            }
+          }
+          return listProduct;
+        }
+        return [];
+      },
+      set: () => {},
+    },
+
+    listProductsHotOne: {
+      get: function () {
+        let listProduct = [];
+        if (this.listProductsHot) {
+          for (let i = 0; i < 3; i++) {
+            if (this.listProductsHot[i]) {
+              listProduct.push(this.listProductsHot[i]);
+            }
+          }
+          return listProduct;
+        }
+        return [];
+      },
+      set: () => {},
+    },
+    listProductsHotTow: {
+      get: function () {
+        let listProduct = [];
+        if (this.listProductsHot) {
+          for (let i = 3; i < 6; i++) {
+            if (this.listProductsHot[i]) {
+              listProduct.push(this.listProductsHot[i]);
+            }
+          }
+          return listProduct;
+        }
+        return [];
+      },
+      set: () => {},
+    },
+    listProductsHotThree: {
+      get: function () {
+        let listProduct = [];
+        if (this.listProductsHot) {
+          for (let i = 6; i < 9; i++) {
+            if (this.listProductsHot[i]) {
+              listProduct.push(this.listProductsHot[i]);
+            }
+          }
+          return listProduct;
+        }
+        return [];
+      },
+      set: () => {},
+    },
+  },
   watch: {},
   mounted() {},
   methods: {},
@@ -186,7 +287,6 @@ export default {
 }
 .slide {
   margin-top: 80px;
-
 }
 .product-slide {
   padding: 5% !important;

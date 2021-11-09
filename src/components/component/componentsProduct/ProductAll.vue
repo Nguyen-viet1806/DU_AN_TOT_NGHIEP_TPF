@@ -1,63 +1,93 @@
 <template>
   <div class="vgrid product-all">
+    <loading v-if="isLoading"/>
     <div class="vrow product-all-body">
-      <div class="vcol vl-4 vm-4 vc-12">
-        <base-product-unit v-bind:isShowProduct="isShowProduct" />
+        <div
+        v-for="product in ListProductsParent"
+        :key="product"
+        class="vcol vl-4 vm-4 vc-12"
+      >
+        <base-product-unit :product="product" :isShowProduct="isShowProduct"/>
       </div>
-      <div class="vcol vl-4 vm-4 vc-12">
-        <base-product-unit v-bind:isShowProduct="isShowProduct" />
-      </div>
-      <div class="vcol vl-4 vm-4 vc-12">
-        <base-product-unit v-bind:isShowProduct="isShowProduct" />
-      </div>
-      <div class="vcol vl-4 vm-4 vc-12">
-        <base-product-unit v-bind:isShowProduct="isShowProduct" />
-      </div>
-      <div class="vcol vl-4 vm-4 vc-12">
-        <base-product-unit v-bind:isShowProduct="isShowProduct" />
-      </div>
-      <div class="vcol vl-4 vm-4 vc-12">
-        <base-product-unit v-bind:isShowProduct="isShowProduct" />
-      </div>
-      <div class="vcol vl-4 vm-4 vc-12">
-        <base-product-unit v-bind:isShowProduct="isShowProduct" />
-      </div>
-      <div class="vcol vl-4 vm-4 vc-12">
-        <base-product-unit v-bind:isShowProduct="isShowProduct" />
-      </div>
-      <div class="vcol vl-4 vm-4 vc-12">
-        <base-product-unit v-bind:isShowProduct="isShowProduct" />
-      </div>
-      <div class="vcol vl-4 vm-4 vc-12">
-        <base-product-unit v-bind:isShowProduct="isShowProduct" />
-      </div>
-      <div class="vcol vl-4 vm-4 vc-12">
-        <base-product-unit v-bind:isShowProduct="isShowProduct" />
-      </div>
-      <div class="vcol vl-4 vm-4 vc-12">
-        <base-product-unit v-bind:isShowProduct="isShowProduct" />
-      </div>
+    </div>
+    <div class="panigation-tpf mt-4">
+      <nav class="Page" aria-label="Page navigation example ">
+        <ul class="pagination">
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="#"
+              aria-label="Previous"
+              v-on:click.prevent="pagePre"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#" v-on:click.prevent="">{{
+              pageable + 1
+            }}</a>
+          </li>
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="#"
+              aria-label="Next"
+              v-on:click.prevent="pageNext"
+            >
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 </template>
 
 <script>
+import Loading from "@/components/common/Loading.vue";
 import BaseProductUnit from "@/components/common/BaseProductUnit.vue";
+import { mapGetters } from "vuex";
 export default {
   name: "ProductAll",
-  components: { BaseProductUnit },
+  components: { BaseProductUnit, Loading },
   props: {},
   data() {
     return {
       isShowProduct: true,
+      pageable: 0,
+      isLoading: false,
     };
   },
-  computed: {},
-  watch: {},
+  computed: {
+    ...mapGetters({
+      ListProductsParent: "productModule/getListProductsParent",
+    }),
+  },
+  watch: {
+    pageable(){
+      this.$emit('getProductParent')
+    }
+  },
   mounted() {},
-  methods: {},
+  methods: {
+    pageNext() {
+      this.pageable++;
+    },
+
+    pagePre() {
+      if (this.pageable > 0) {
+        this.pageable--;
+      }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+.panigation-tpf {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>

@@ -1,18 +1,35 @@
 <template>
-  <base-product-detail />
+  <div>
+    <base-product-detail ref="BaseProductDetail" />
+    <product-with-category-click />
+  </div>
 </template>
 
 <script>
 import BaseProductDetail from "@/components/common/BaseProductDetail.vue";
+import ProductWithCategoryClick from "@/components/component/componentsProduct/ProductWithCategoryClick.vue";
+
 export default {
   name: "ProductDetail",
-  components: { BaseProductDetail },
+  components: { BaseProductDetail, ProductWithCategoryClick },
   props: {},
   data() {},
   computed: {},
   watch: {},
-  mounted() {},
-  methods: {},
+  created() {
+  },
+  mounted() {
+    this.initData()
+  },
+  methods: {
+    initData() {
+      this.setscoll();
+    },
+    setscoll() {
+      document.documentElement.scrollTop = 900;
+      document.body.scrollTop = 0;
+    },
+  },
 };
 </script>
 

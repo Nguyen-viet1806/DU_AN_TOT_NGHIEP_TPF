@@ -41,9 +41,9 @@
         <a href="#" class="navbar-icons-main-logo"
           ><fa :icon="['fas', 'heart']"
         /></a>
-        <a href="#" class="navbar-icons-main-logo"
+        <router-link  to="/card" class="navbar-icons-main-logo"
           ><fa :icon="['fas', 'shopping-cart']"
-        /></a>
+        /></router-link>
         <a
           v-on:click="showMenuBar"
           class="navbar-icons-main-logo"

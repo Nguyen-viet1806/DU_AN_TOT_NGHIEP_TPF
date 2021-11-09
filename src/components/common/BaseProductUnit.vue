@@ -1,7 +1,11 @@
 <template>
   <div>
-    <div v-if="isShowProduct" v-on:click="test" class="product-unit">
-      <div id="img-product" class="product-unit-img">
+    <div v-if="isShowProduct" class="product-unit">
+      <div
+        id="img-product"
+        class="product-unit-img"
+        :style="['background-image: url(' + DO_MAIN +  product.frontPhoto   + ');']"
+      >
         <div class="favorite" v-on:click="onCickFavoriteProduct">
           <fa
             v-if="isFavorite"
@@ -15,11 +19,11 @@
           />
         </div>
       </div>
-      <p class="product-unit-name">Tobekind Varsity Jacket - Olive</p>
-      <p>680.000đ</p>
+      <p class="product-unit-name" @click="onCLickProduct(product.idProduct)">{{ product.nameProduct }}</p>
+      <p>{{ product.minPrice }}.đồng</p>
       <p>
-        <fa class="person-favorite" :icon="['fas', 'heart']" /> Đã có 100 người
-        thích
+        <fa class="person-favorite" :icon="['fas', 'heart']" /> Đã có
+        {{ product.like }} người thích
       </p>
     </div>
 
@@ -40,6 +44,7 @@
 </template>
 
 <script>
+import { DO_MAIN } from "@/constants/constants";
 export default {
   name: "BaseProductUnit",
   components: {},
@@ -52,9 +57,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    product: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
+      DO_MAIN,
       isFavorite: false,
     };
   },
@@ -62,6 +72,16 @@ export default {
   watch: {},
   mounted() {},
   methods: {
+    onCLickProduct(idProduct){
+      if(idProduct){
+        this.$router.push({ 
+          path: "/product-detail",
+          query: {
+            idProduct: idProduct
+          },
+        })
+      }
+    },
     onCickFavoriteProduct() {
       this.isFavorite = !this.isFavorite;
     },
@@ -76,24 +96,6 @@ export default {
       imgProduct.style.backgroundImage =
         "url('../../assets/img/tobekind-varsity-jacket-pink-949779_1000x.jpg')";
     },
-    test() {
-      // var a = {a: "ádasd"}
-      // var b = a
-      // b.a="123"
-      // console.log(a)
-      // console.log(a.a===b.a)
-      let person1 = { name: "Việt", skill: { coding: "Javascript" } };
-      let person2 = { ...person1 };
-      console.log(person1.skill === person2.skill); 
-      // person1.name = "ádadasdsa"
-      // console.log(person1.name); 
-      // console.log(person2.name); 
-      // console.log(person1=== person2); 
-      // person2.skill.coding =  "HTML";
-      // console.log(person1.skill); 
-      // console.log(person2.skill); 
-      // console.log(person1.skill === person2.skill); 
-    },
   },
 };
 </script>
@@ -104,10 +106,8 @@ export default {
   margin-top: 50px;
   &-img {
     position: relative;
-    cursor: pointer;
     height: 430px;
     width: 100%;
-    background-image: url("../../assets/img/tobekind-varsity-jacket-pink-331299_1080x.jpg");
     background-position: center center;
     background-size: cover;
     &:hover {
@@ -126,7 +126,11 @@ export default {
   }
   &-name {
     cursor: pointer;
+    &:hover{
+      font-size: 18px;
+    }
   }
+  
 }
 .person-favorite {
   color: red;
