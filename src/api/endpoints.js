@@ -20,7 +20,7 @@ export default {
   SEARCH_COLOR: "/api/webtpf/admin/colors/search/",
   FILTER_COLOR: "/api/webtpf/admin/colors/findbystatus/",
   GET_LIST_COLOR_SORT: "/api/webtpf/admin/colors/getallsort",
-  GET_LIST_COLOR_EXISTS:"/api/webtpf/admin/colors/findexists",
+  GET_LIST_COLOR_EXISTS:"/api/webtpf/admin/colors/findexists",//
 
   //Sale
   GET_ALL_SALE: "/api/webtpf/admin/sales/getall/",
@@ -48,7 +48,7 @@ export default {
   SEARCH_CATEGORY_PARENT: "/api/webtpf/admin/categories/parent/search/",
   FILTER_CATEGORY_PARENT: "/api/webtpf/admin/categories/parent/findbystatus/",
   GET_LIST_CATEGORY_PARENT_SORT: "/api/webtpf/admin/categories/parent/getallsort",
-  GET_CATEGORY_EXISTS: "/api/webtpf/admin/categories/getexists",
+  GET_CATEGORY_EXISTS: "/api/webtpf/admin/categories/getexists",//
   
   //CategoryChild
   GET_ALL_CATEGORY_CHILD: "/api/webtpf/admin/categories/child/getall/",
@@ -58,7 +58,7 @@ export default {
   SEARCH_CATEGORY_CHILD: "/api/webtpf/admin/categories/child/search/",
   FILTER_CATEGORY_CHILD: "/api/webtpf/admin/categories/child/findbystatus/",
   GET_LIST_CATEGORY_CHILD_SORT: "/api/webtpf/admin/categories/child/getallsort",
-  GET_LIST_CATEGORY_CHILD_EXISTS_BY_PARENT: "/api/webtpf/admin/categories/child/findbyparent/",
+  GET_LIST_CATEGORY_CHILD_EXISTS_BY_PARENT: "/api/webtpf/admin/categories/child/findbyparent/",//
 
   //product
   GET_PRODUCT: "/api/webtpf/user/products/showall",

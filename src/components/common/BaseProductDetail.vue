@@ -253,6 +253,14 @@ export default {
       );
     },
     addCard(paynow = false) {
+      if(!this.productDetail.idProductDetail){
+        this.isShowNotify = true;
+          this.infoNotify = "Bạn chưa chọn màu hoặc size";
+          if (this.isShowNotify) {
+            setTimeout(this.closeNotify, 1500);
+          }
+          return
+      }
       let payload = {
         idProductDetail: this.productDetail.idProductDetail,
         idCart: 2,

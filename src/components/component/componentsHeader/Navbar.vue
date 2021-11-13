@@ -33,9 +33,6 @@
 
       <div class="navbar-icons-main">
         <a href="#" class="navbar-icons-main-logo"
-          ><fa :icon="['fas', 'search']"
-        /></a>
-        <a href="#" class="navbar-icons-main-logo"
           ><fa :icon="['fas', 'user-alt']"
         /></a>
         <a href="#" class="navbar-icons-main-logo"
@@ -50,6 +47,9 @@
           id="icons-bars"
           ><fa :icon="['fas', 'bars']" />
         </a>
+        <a href="#" class="navbar-icons-main-logo"
+          ><fa :icon="['fas', 'sign-in-alt']"
+        /></a>
       </div>
     </div>
     <a href="#first-position">

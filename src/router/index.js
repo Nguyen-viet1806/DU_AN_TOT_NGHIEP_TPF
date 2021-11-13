@@ -5,6 +5,7 @@ import PageProduct from "@/views/PageProduct.vue";
 import PageProductDetail from "@/views/PageProductDetail.vue";
 import PageCard from "@/views/PageCard.vue";
 import PagePay from "@/views/PagePay.vue";
+import PageLogin from "@/views/PageLogin.vue";
 const routes = [
   {
     path: "/",
@@ -35,6 +36,11 @@ const routes = [
     path: "/pay",
     name: "PagePay",
     component: PagePay,
+  },
+  {
+    path: "/login",
+    name: "PageLogin",
+    component: PageLogin,
   },
 ];
 
