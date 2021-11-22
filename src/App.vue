@@ -33,7 +33,6 @@ export default {
   border: none;
   outline: none;
   text-decoration: none;
-  text-transform: capitalize;
   transition: all 0.2s linear;
   font-family: "Nunito", sans-serif;
   font-family: "Space Mono", monospace;
@@ -123,6 +122,67 @@ html {
   }
   100% {
     transform: scale(1);
+  }
+}
+.overlayv {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  transition: opacity 500ms;
+  visibility: visible;
+  opacity: 1;
+}
+
+.popupv {
+  box-shadow: #b0b7bd 0px 2px 15px 0px;
+  visibility: visible;
+  opacity: 1;
+  padding: 30px;
+  background: #fff;
+  border-radius: 5px;
+  width: 81.5%;
+  position: fixed;
+  top: 110px;
+  left: 10%;
+  transition: all 1s ease-in-out;
+  z-index: 1002;
+}
+.popupv h2 {
+  margin-top: 0;
+  color: #333;
+  font-family: Tahoma, Arial, sans-serif;
+}
+.popupv .closev {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popupv .closev:hover {
+  color: #06d85f;
+}
+.popupv .contentv {
+  height: 70vh;
+  overflow: auto;
+  overflow-x: hidden;
+   &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #990033;
+  }
+  &::-webkit-scrollbar-track {
+    background: white;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #d4aa70;
   }
 }
 </style>

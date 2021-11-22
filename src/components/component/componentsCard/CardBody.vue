@@ -22,10 +22,14 @@
     <div class="vrow">
       <div class="vcol vl-8 vm-8 vc-12">
         <div class="card">
-          <div class="emty-cart" v-if="ListCard.length <= 0">
+          <div class="emty-cart" v-if="ListCard.cartProducts?.length <= 0">
             <img width="600" src="../../../assets/empty-cart.svg" />
           </div>
-          <div class="product-incard" v-for="card in ListCard" :key="card">
+          <div
+            class="product-incard"
+            v-for="card in ListCard.cartProducts"
+            :key="card"
+          >
             <img
               class="img-product"
               :src="DO_MAIN + card.productDetailDTO.detailPhoto"
@@ -35,6 +39,22 @@
               <div class="product-quntity">
                 <p>Tên sản phẩm: {{ card.productDetailDTO.nameProduct }}</p>
                 <p>Hàng còn : {{ card.productDetailDTO.amount }}</p>
+                <p>
+                  Size,màu :
+                  {{
+                    card.productDetailDTO.sizeDTO.nameSize +
+                    ", " +
+                    card.productDetailDTO.colorDTO.nameColor
+                  }}
+                </p>
+                <p>
+                  Giá:
+                  {{
+                    new Intl.NumberFormat("de-DE").format(
+                      card.productDetailDTO.price
+                    )
+                  }}đ
+                </p>
                 <p class="mt-5">
                   Số lượng:
                   <button class="btn-quantity" @click="updateCard(card, 'tru')">
@@ -54,7 +74,7 @@
                   </button>
                 </p>
                 <p>
-                  Giá:
+                  Tổng:
                   {{
                     new Intl.NumberFormat("de-DE").format(
                       card.productDetailDTO.price
@@ -87,7 +107,7 @@
                     pageable + 1
                   }}</a>
                 </li>
-                <li class="page-item">
+                <li v-if="ListCard.isNextPage" class="page-item">
                   <a
                     class="page-link"
                     href="#"
@@ -104,9 +124,7 @@
       </div>
       <div class="vcol vl-4 vm-4 vc-12">
         <div class="pay">
-          <p>
-            Tổng cộng: {{ new Intl.NumberFormat("de-DE").format(allPrice) }}đ
-          </p>
+          <p>Tổng cộng: {{ ListCard.totalMoney }}đ</p>
           <p>
             <button class="btn-pay mt-2" @click="onClickPay">Thanh toán</button>
             <button @click="onClickGoProduct" class="btn btn-continue mt-2">
@@ -153,6 +171,15 @@ export default {
       this.getListCard();
     },
     onClickPay() {
+      if (this.ListCard.cartProducts?.length <= 0) {
+        this.isShowNotify = true;
+        this.infoNotify = "Bạn không có sản phẩm để mua !";
+        setTimeout(() => {
+          this.isShowNotify = false;
+          this.infoNotify = "";
+        }, 1000);
+        return;
+      }
       document.documentElement.scrollTop = 900;
       document.body.scrollTop = 0;
       this.$router.push({ path: "/pay" });
@@ -189,30 +216,18 @@ export default {
       };
       this.$store.dispatch("cardModule/updateCard", payload).then((res) => {
         if (res) {
-          this.getPriceAll();
+          this.getListCard();
         }
       });
     },
-    getPriceAll() {
-      this.allPrice = 0;
-      for (let i = 0; i < this.ListCard.length; i++) {
-        this.allPrice +=
-          this.ListCard[i].productDetailDTO.price * this.ListCard[i].quantity;
-      }
-    },
+
     getListCard() {
       let payload = {
-        idCart: 2,
+        idCart: JSON.parse(localStorage.getItem("UserInfo"))?.idCart,
         page: this.pageable,
         limit: 5,
       };
-      this.$store
-        .dispatch("cardModule/getDanhSachCard", payload)
-        .then((res) => {
-          if (res) {
-            this.getPriceAll();
-          }
-        });
+      this.$store.dispatch("cardModule/getDanhSachCard", payload);
     },
     deleteCard(CartDetal) {
       let payload = {
@@ -259,7 +274,7 @@ export default {
         };
         this.$store.dispatch("cardModule/updateCard", payload).then((res) => {
           if (res) {
-            this.getPriceAll();
+            this.getListCard();
           }
         });
       }

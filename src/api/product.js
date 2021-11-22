@@ -73,4 +73,11 @@ export function callApiGetListProductFollowCategory(payload) {
   });
 }
 
+export function callApiListDislikeProduct(payload) {
+  return HTTP({
+    url: ENDPOINT.LIKE_DISLIKE_PRODUCT,
+    method: "POST",
+    data: payload,
+  });
+}
 

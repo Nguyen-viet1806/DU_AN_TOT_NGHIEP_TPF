@@ -113,8 +113,8 @@
             {{
               productDetail.price
                 ? productDetail.price
-                : productDetail.minPrice
-            }}đ
+                : productDetail.minPrice + "đ ~ " + productDetail.maxPrice +"đ"
+            }}
           </p>
           <p class="mt-1">Mô tả : {{ productDetail.descriptionProduct }}</p>
 
@@ -243,9 +243,10 @@ export default {
     },
     getListProductWithCategory() {
       let payload = {
-        idCategory: this.productDetail.categoryChildDTO.idCategory,
+        idCategory: this.productDetail.categoryParentDTO.idCategory,
         page: 0,
         limit: 6,
+        userId: JSON.parse(localStorage.getItem("UserInfo")) && JSON.parse(localStorage.getItem("UserInfo")).idUser ? JSON.parse(localStorage.getItem("UserInfo")).idUser :  -1,
       };
       this.$store.dispatch(
         "productModule/getListProductFollowCategory",
@@ -263,7 +264,7 @@ export default {
       }
       let payload = {
         idProductDetail: this.productDetail.idProductDetail,
-        idCart: 2,
+        idCart: JSON.parse(localStorage.getItem("UserInfo")).idCart,
       };
       this.$store.dispatch("cardModule/addCard", payload).then((res) => {
         if (res) {

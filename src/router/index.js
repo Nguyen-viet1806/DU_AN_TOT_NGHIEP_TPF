@@ -1,46 +1,50 @@
 import { createRouter, createWebHistory } from "vue-router";
-import PageHome from "@/views/PageHome.vue";
-import PageNews from "@/views/PageNews.vue";
-import PageProduct from "@/views/PageProduct.vue";
-import PageProductDetail from "@/views/PageProductDetail.vue";
-import PageCard from "@/views/PageCard.vue";
-import PagePay from "@/views/PagePay.vue";
-import PageLogin from "@/views/PageLogin.vue";
+
 const routes = [
   {
     path: "/",
     name: "Home",
-    component: PageHome,
+    component: () => import ("@/views/PageHome.vue"),
   },
   {
     path: "/news",
     name: "News",
-    component: PageNews,
+    component: () => import ("@/views/PageNews.vue"),
   },
   {
     path: "/product",
     name: "Product",
-    component: PageProduct,
+    component: () => import ("@/views/PageProduct.vue"),
   },
   {
     path: "/product-detail",
     name: "ProductDetail",
-    component: PageProductDetail,
+    component: () => import ("@/views/PageProductDetail.vue"),
   },
   {
     path: "/card",
     name: "PageCard",
-    component: PageCard,
+    component: () => import ("@/views/PageCard.vue"),
   },
   {
     path: "/pay",
     name: "PagePay",
-    component: PagePay,
+    component: () => import ("@/views/PagePay.vue"),
   },
   {
     path: "/login",
     name: "PageLogin",
-    component: PageLogin,
+    component: () => import ("@/views/PageLogin.vue"),
+  },
+  {
+    path: "/profile",
+    name: "PageProfile",
+    component: () => import ("@/views/PageProfile.vue"),
+  },
+  {
+    path: "/bill",
+    name: "PageBill",
+    component: () => import ("@/views/PageBill.vue"),
   },
 ];
 

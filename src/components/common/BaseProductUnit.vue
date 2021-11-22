@@ -4,9 +4,11 @@
       <div
         id="img-product"
         class="product-unit-img"
-        :style="['background-image: url(' + DO_MAIN +  product.frontPhoto   + ');']"
+        :style="[
+          'background-image: url(' + DO_MAIN + product.frontPhoto + ');',
+        ]"
       >
-        <div class="favorite" v-on:click="onCickFavoriteProduct">
+        <div class="favorite" v-on:click="listDislikeProduct">
           <fa
             v-if="isFavorite"
             class="product-favorite"
@@ -19,11 +21,13 @@
           />
         </div>
       </div>
-      <p class="product-unit-name" @click="onCLickProduct(product.idProduct)">{{ product.nameProduct }}</p>
-      <p>{{ product.minPrice }}.đồng</p>
+      <p class="product-unit-name" @click="onCLickProduct(product.idProduct)">
+        {{ product.nameProduct }}
+      </p>
+      <p>{{ product.minPrice }}.đồng ~ {{ product.maxPrice }}.đồng</p>
       <p>
         <fa class="person-favorite" :icon="['fas', 'heart']" /> Đã có
-        {{ product.like }} người thích
+        {{ product.like + isFavorite ? 1 : 0}} người thích
       </p>
     </div>
 
@@ -65,7 +69,7 @@ export default {
   data() {
     return {
       DO_MAIN,
-      isFavorite: false,
+      isFavorite: this.product?.isLike,
     };
   },
   computed: {},
@@ -82,20 +86,29 @@ export default {
         })
       }
     },
-    onCickFavoriteProduct() {
-      this.isFavorite = !this.isFavorite;
-    },
-    onmouseoverImg() {
-      let imgProduct = document.getElementById("img-product");
-      imgProduct.style.backgroundImage =
-        "url('../../assets/img/tobekind-varsity-jacket-pink-331299_1080x.jpg')";
-    },
+    // onmouseoverImg() {
+    //   let imgProduct = document.getElementById("img-product");
+    //   imgProduct.style.backgroundImage =
+    //     "url('../../assets/img/tobekind-varsity-jacket-pink-331299_1080x.jpg')";
+    // },
 
-    onmouseoutImg() {
-      let imgProduct = document.getElementById("img-product");
-      imgProduct.style.backgroundImage =
-        "url('../../assets/img/tobekind-varsity-jacket-pink-949779_1000x.jpg')";
+    // onmouseoutImg() {
+    //   let imgProduct = document.getElementById("img-product");
+    //   imgProduct.style.backgroundImage =
+    //     "url('../../assets/img/tobekind-varsity-jacket-pink-949779_1000x.jpg')";
+    // },
+    listDislikeProduct(){
+      this.isFavorite = !this.isFavorite;
+      let payload = {
+        idUser: JSON.parse(localStorage.getItem("UserInfo"))?.idUser,
+        idProduct: this.product.idProduct,
+        idCombo: null,
+        isLike: this.isFavorite,
+      }
+      this.$store
+        .dispatch("productModule/listDislikeProduct", payload)
     },
+    
   },
 };
 </script>
@@ -126,11 +139,10 @@ export default {
   }
   &-name {
     cursor: pointer;
-    &:hover{
+    &:hover {
       font-size: 18px;
     }
   }
-  
 }
 .person-favorite {
   color: red;

@@ -31,3 +31,27 @@ export function callApiPay(payload) {
     data: payload
   });
 }
+
+export function callApiGetAllBill(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_ALL_BILL,
+    method: "GET",
+    params: payload
+  });
+}
+
+export function callApiGetListBillSort(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_BILL_SORT,
+    method: "GET",
+    params: payload
+  });
+}
+
+export function callApiHuyBill(payload) {
+  return HTTP({
+    url: ENDPOINT.HUY_BILL,
+    method: "POST",
+    data: payload
+  });
+}

@@ -1,11 +1,32 @@
 <template>
   <div class="vgrid pay">
-    <h3 class="title-big">Giỏ hàng</h3>
+    <div class="notify">
+      <div
+        id="popup1"
+        v-if="isShowNotify"
+        class="overlay"
+        @click="closeNotify"
+      ></div>
+      <transition name="bounce">
+        <div id="popup1" v-if="isShowNotify" class="popup">
+          <h2>Thông báo:</h2>
+          <a class="close" @click="closeNotify">&times;</a>
+          <div class="content">
+            {{ infoNotify }}
+          </div>
+        </div>
+      </transition>
+    </div>
+    <h3 class="title-big">Thanh toán</h3>
     <div class="vrow">
       <div class="vcol vl-6 vm-6 vc-12">
         <div class="info-pay">
           <div class="product-pay">
-            <div v-for="card in ListCard" :key="card" class="product-pay-unit">
+            <div
+              v-for="card in ListCard.cartProducts"
+              :key="card"
+              class="product-pay-unit"
+            >
               <div class="product-img">
                 <img :src="DO_MAIN + card.productDetailDTO.detailPhoto" />
               </div>
@@ -70,6 +91,10 @@
       <div class="vcol vl-6 vm-6 vc-12">
         <div class="info-user">
           <h4>Thông tin liên hệ</h4>
+          <p class="mb-2">
+            <input type="checkbox" v-model="isSuDungThongTinDaluu" /> Sử dụng
+            thông tin đã lưu !
+          </p>
           <form @submit.prevent="onSubmit" class="row g-3">
             <div class="input-group">
               <input
@@ -79,6 +104,7 @@
                 aria-describedby="inputGroupPrepend2"
                 placeholder="Email"
                 v-model="emailUser"
+                :disabled="isSuDungThongTinDaluu"
                 required
               />
             </div>
@@ -90,6 +116,7 @@
                 aria-describedby="inputGroupPrepend2"
                 placeholder="Số điện thoại"
                 v-model="phoneUser"
+                :disabled="isSuDungThongTinDaluu"
                 required
               />
             </div>
@@ -100,6 +127,7 @@
                 v-model="idProvince"
                 class="form-select"
                 id="validationDefault04"
+                :disabled="isSuDungThongTinDaluu"
                 required
               >
                 <option selected value="">Chọn tỉnh</option>
@@ -107,6 +135,7 @@
                   v-for="Province in listProvince"
                   :key="Province"
                   :value="Province.idProvince"
+                  :disabled="isSuDungThongTinDaluu"
                 >
                   {{ Province.nameProvince }}
                 </option>
@@ -115,7 +144,7 @@
 
             <div class="input-group">
               <select
-                :disabled="isDisabledDistrict"
+                :disabled="isDisabledDistrict || isSuDungThongTinDaluu"
                 v-model="idDistrict"
                 class="form-select"
                 id="validationDefault04"
@@ -133,7 +162,7 @@
             </div>
             <div class="input-group">
               <select
-                :disabled="isDisabledCommune"
+                :disabled="isDisabledCommune || isSuDungThongTinDaluu"
                 v-model="idCommune"
                 class="form-select"
                 id="validationDefault04"
@@ -156,9 +185,24 @@
                 id="validationDefault03"
                 placeholder="Vui lòng điền số nhà, ngõ"
                 v-model="detailAddress"
+                :disabled="isSuDungThongTinDaluu"
                 required
               />
             </div>
+            <div class="input-group">
+              <textarea
+                type="text"
+                class="form-control"
+                id="validationDefault03"
+                placeholder="Mô tả"
+                v-model="descriptionBill"
+              />
+            </div>
+
+            <p class="mb-2" v-if="!isSuDungThongTinDaluu">
+              <input type="checkbox" v-model="isLuuThongtinChoLanSau" /> Lưu
+              thông tin này làm thông tin cá nhân!
+            </p>
             <div class="col-12">
               <button class="btn btn-pay" type="submit">Thanh toán</button>
             </div>
@@ -178,19 +222,25 @@ export default {
   props: {},
   data() {
     return {
+      isSuDungThongTinDaluu: false,
+      isLuuThongtinChoLanSau: false,
       allPrice: 0,
       DO_MAIN,
       listProvince: [],
       listDistrict: [],
       listCommune: [],
+      idAddress: null,
       idProvince: "",
       idDistrict: "",
       idCommune: "",
-      isDisabledDistrict: true,
-      isDisabledCommune: true,
-      detailAddress: null,
+      detailAddress: "",
       phoneUser: "",
       emailUser: "",
+      descriptionBill: "",
+      isDisabledDistrict: true,
+      isDisabledCommune: true,
+       isShowNotify: false,
+      infoNotify: "",
     };
   },
   computed: {
@@ -199,6 +249,27 @@ export default {
     }),
   },
   watch: {
+    isSuDungThongTinDaluu() {
+      if (this.isSuDungThongTinDaluu) {
+        let user = JSON.parse(localStorage.getItem("UserInfo"));
+        this.idAddress = user.addressDTO.idAddress;
+        this.idProvince = user.addressDTO.idProvince;
+        this.idDistrict = user.addressDTO.idDistrict;
+        this.idCommune = user.addressDTO.idCommune;
+        this.detailAddress = user.addressDTO.detailAddress;
+        this.phoneUser = user.phoneNumber;
+        this.emailUser = user.email;
+        this.isLuuThongtinChoLanSau = false;
+      } else {
+        this.idAddress = null;
+        this.idProvince = "";
+        this.idDistrict = "";
+        this.idCommune = "";
+        this.detailAddress = null;
+        this.phoneUser = "";
+        this.emailUser = "";
+      }
+    },
     idProvince() {
       if (this.idProvince.length > 0 || this.idProvince != "") {
         this.isDisabledDistrict = false;
@@ -240,6 +311,8 @@ export default {
   },
   methods: {
     initData() {
+      document.documentElement.scrollTop = 900;
+      document.body.scrollTop = 0;
       this.getListCard();
       this.getListTinh();
     },
@@ -252,14 +325,15 @@ export default {
     },
     getPriceAll() {
       this.allPrice = 0;
-      for (let i = 0; i < this.ListCard.length; i++) {
+      for (let i = 0; i < this.ListCard.cartProducts.length; i++) {
         this.allPrice +=
-          this.ListCard[i].productDetailDTO.price * this.ListCard[i].quantity;
+          this.ListCard.cartProducts[i].productDetailDTO.price *
+          this.ListCard.cartProducts[i].quantity;
       }
     },
     getListCard() {
       let payload = {
-        idCart: 2,
+        idCart: JSON.parse(localStorage.getItem("UserInfo"))?.idCart,
         page: 0,
         limit: 100000,
       };
@@ -267,6 +341,18 @@ export default {
         .dispatch("cardModule/getDanhSachCard", payload)
         .then((res) => {
           if (res) {
+            if (this.ListCard.cartProducts.length <= 0) {
+              this.isShowNotify = true;
+              this.infoNotify = "Bạn không có sản phẩm để mua !";
+              setTimeout(() => {
+                this.isShowNotify = false;
+                this.infoNotify = "";
+              }, 1000);
+              setTimeout(() => {
+                this.$router.push({ path: "/product" });
+              }, 1500);
+              return;
+            }
             this.getPriceAll();
           }
         });
@@ -278,22 +364,22 @@ export default {
       let datestring = today.getFullYear() + "-" + Month + "-" + day;
       let listProductTemp = [];
 
-      for (let i = 0; i < this.ListCard.length; i++) {
+      for (let i = 0; i < this.ListCard.cartProducts.length; i++) {
         let productTemp = {
           idProductDetail: null,
           quantity: null,
           idStatus: null,
         };
         productTemp.idProductDetail =
-          this.ListCard[i].productDetailDTO.idProductDetail;
-        productTemp.quantity = this.ListCard[i].quantity;
+          this.ListCard.cartProducts[i].productDetailDTO.idProductDetail;
+        productTemp.quantity = this.ListCard.cartProducts[i].quantity;
         productTemp.idStatus = 2;
         listProductTemp.push(productTemp);
       }
 
       let payload = {
         idBill: null,
-        idUser: 7,
+        idUser: JSON.parse(localStorage.getItem("UserInfo")).idUser,
         idAddress: null,
         phoneUser: this.phoneUser,
         emailUser: this.emailUser,
@@ -305,10 +391,12 @@ export default {
         payment: this.allPrice,
         transportFee: 30000,
         idVoucher: null,
-        idStatus: 2,
+        codeVoucher: null,
+        billType: 0,
+        idStatus: 6,
         listProductDetail: [...listProductTemp],
         addressRequestDTO: {
-          idAddress: null,
+          idAddress: this.idAddress,
           idProvince: this.idProvince,
           idDistrict: this.idDistrict,
           idCommune: this.idCommune,
@@ -319,6 +407,7 @@ export default {
         if (res) {
           this.listDistrict = [];
           this.listCommune = [];
+          this.idAddress = null;
           this.idProvince = "";
           this.idDistrict = "";
           this.idCommune = "";

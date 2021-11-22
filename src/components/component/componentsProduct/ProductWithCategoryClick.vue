@@ -1,6 +1,6 @@
 <template>
   <div class="vgrid wide product-category mb-5">
-    <div v-if="ListProductsParent && ListProductsParent.lenght > 0">
+    <div>
       <hr />
       <h3 class="title">Sản phẩm cùng danh mục</h3>
       <div class="vrow product-category-body">

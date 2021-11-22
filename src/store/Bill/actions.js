@@ -2,7 +2,10 @@ import {
   callApiGetDanhSachTinh,
   callApiGetDanhSachQuanHuyen,
   callApiGetDanhSachXa,
-  callApiPay
+  callApiPay,
+  callApiGetAllBill,
+  callApiHuyBill,
+  callApiGetListBillSort,
 } from "@/api/bill.js";
 
 const getDanhSachTinh = (context, payload) => {
@@ -52,9 +55,55 @@ const pay = (context, payload) => {
   });
 };
 
+const getAllBill = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetAllBill(payload)
+      .then((response) => {
+        if(response){
+          context.commit("SET_LIST_BILL", response.data.data);
+        }
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const getListBillSort = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetListBillSort(payload)
+      .then((response) => {
+        if(response){
+          context.commit("SET_LIST_BILL", response.data.data);
+        }
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+
+
+const huyBill = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiHuyBill(payload)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
 export default {
   getDanhSachTinh,
   getDanhSachQuanHuyen,
   getDanhSachXa,
   pay,
+  getAllBill,
+  huyBill,
+  getListBillSort,
 };

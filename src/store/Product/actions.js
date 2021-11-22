@@ -8,8 +8,21 @@ import {
   callApiGetListProductHot,
   callApiGetListProductNew,
   callApiGetListProductFollowCategory,
+  callApiListDislikeProduct,
 } from "@/api/product.js";
+import { callApiUploadFile } from "@/api/common.js";
 
+const uploadFile = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiUploadFile(payload)
+      .then((reponse) => {
+        resolve(reponse);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
 const getListProductParent = (context, payload) => {
   return new Promise((resolve, reject) => {
     callApiGetListProduct(payload)
@@ -20,6 +33,7 @@ const getListProductParent = (context, payload) => {
         resolve(response);
       })
       .catch((error) => {
+        console.log(error.config)
         reject(error);
       });
   });
@@ -82,6 +96,18 @@ const showProductDetailFollowColor = (context, payload) => {
 const showProductDetailFollowColorAndSize = (context, payload) => {
   return new Promise((resolve, reject) => {
     callApiShowProductDetailFollowColorAndSize(payload)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const listDislikeProduct = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiListDislikeProduct(payload)
       .then((response) => {
         resolve(response);
       })
@@ -163,4 +189,6 @@ export default {
   getListProductNew,
   getListProductHot,
   getListProductFollowCategory,
+  uploadFile,
+  listDislikeProduct,
 };

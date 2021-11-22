@@ -46,6 +46,7 @@ export default {
     getProductParent() {
       this.$refs["productAll"].isLoading = true;
       let payload = {
+        userId: JSON.parse(localStorage.getItem("UserInfo")) && JSON.parse(localStorage.getItem("UserInfo")).idUser ? JSON.parse(localStorage.getItem("UserInfo")).idUser :  -1,
         page: this.$refs["productAll"].pageable,
         limit: 9,
       };
@@ -61,6 +62,7 @@ export default {
     search(name) {
       this.$refs["productAll"].isLoading = true;
       let payload = {
+        userId: JSON.parse(localStorage.getItem("UserInfo")) && JSON.parse(localStorage.getItem("UserInfo")).idUser ? JSON.parse(localStorage.getItem("UserInfo")).idUser :  -1,
         page: this.$refs["productAll"].pageable,
         name: name,
         limit: 9,
@@ -75,6 +77,7 @@ export default {
     getProductParentFilter(param) {
       this.$refs["productAll"].isLoading = true;
       let payload = {
+        userId: JSON.parse(localStorage.getItem("UserInfo")) && JSON.parse(localStorage.getItem("UserInfo")).idUser ? JSON.parse(localStorage.getItem("UserInfo")).idUser :  -1,
         ...param,
         page: this.$refs["productAll"].pageable,
         limit: 9,

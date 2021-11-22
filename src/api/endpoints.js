@@ -70,6 +70,8 @@ export default {
   GET_PRODUCT_HOT: "/api/webtpf/user/products/findproducthot",
   GET_PRODUCT_NEW: "/api/webtpf/user/products/findproductnew",
   GET_PRODUCT_FOLLOW_CATEGORY: "/api/webtpf/user/products/findproductrelated",
+  LIKE_DISLIKE_PRODUCT: "/api/webtpf/user/likeordislike",
+  GET_LIST_PRODUCT_LIKE: "/api/webtpf/user/products/findproductlike",
   
   
   // card
@@ -83,4 +85,13 @@ export default {
   GET_LIST_QUAN_HUYEN: "/api/webtpf/getalldistrict",
   GET_LIST_XA: "/api/webtpf/getallcommune",
   PAY: "/api/webtpf/user/bills/save",
+  GET_ALL_BILL: "/api/webtpf/user/bills/getalllistuser",
+  HUY_BILL: "/api/webtpf/user/bills/cancel",
+  GET_LIST_BILL_SORT: "/api/webtpf/user/bills/getalllistandfilteruser",
+
+  //login
+  REGISTER: "/api/webtpf/signup",
+  LOGIN: "/api/webtpf/login",
+  LOGOUT: "/api/webtpf/logout",
+  UPDATE_PROFILE: "/api/webtpf/updateprofile",
 };

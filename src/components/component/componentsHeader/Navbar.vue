@@ -15,30 +15,46 @@
           ><fa :icon="['fab', 'github']"
         /></a>
         <a href="#home" class="navbar-icons-logo" id="logo-main"
-          ><img class="icon" src="@/assets/logoTpf.svg" width="45" height="45"/></a>
+          ><img class="icon" src="@/assets/logoTpf.svg" width="45" height="45"
+        /></a>
       </div>
 
       <nav class="navbar-menu" id="menu-bars">
-        <router-link v-on:click="setscoll" to="/" class="menu-left">Home</router-link>
-        <router-link v-on:click="setscoll" to="/product" class="menu-left" href="#home">Product</router-link>
-        <router-link v-on:click="setscoll" to="/news" class="menu-left" href="#home"
+        <router-link v-on:click="setscoll" to="/" class="menu-left"
+          >Home</router-link
+        >
+        <router-link
+          v-on:click="setscoll"
+          to="/product"
+          class="menu-left"
+          href="#home"
+          >Product</router-link
+        >
+        <router-link
+          v-on:click="setscoll"
+          to="/news"
+          class="menu-left"
+          href="#home"
           >News</router-link
         >
         <a href="#home" id="logo"
-          ><img class="icon" src="@/assets/logoTpf.svg" width="45" height="45"/></a>
-        <router-link to="/product-detail" class="menu-right" href="#home">home</router-link>
+          ><img class="icon" src="@/assets/logoTpf.svg" width="45" height="45"
+        /></a>
+        <router-link to="/bill" class="menu-right" href="#home"
+          >Bills</router-link
+        >
         <a class="menu-right" href="#home">home</a>
         <a class="menu-right" href="#home">home</a>
       </nav>
 
       <div class="navbar-icons-main">
-        <a href="#" class="navbar-icons-main-logo"
+        <router-link to="/profile" class="navbar-icons-main-logo"
           ><fa :icon="['fas', 'user-alt']"
-        /></a>
+        /></router-link>
         <a href="#" class="navbar-icons-main-logo"
           ><fa :icon="['fas', 'heart']"
         /></a>
-        <router-link  to="/card" class="navbar-icons-main-logo"
+        <router-link to="/card" class="navbar-icons-main-logo"
           ><fa :icon="['fas', 'shopping-cart']"
         /></router-link>
         <a
@@ -47,7 +63,13 @@
           id="icons-bars"
           ><fa :icon="['fas', 'bars']" />
         </a>
-        <a href="#" class="navbar-icons-main-logo"
+
+        <router-link
+          to="/login"
+          class="navbar-icons-main-logo"
+          ><fa :icon="['fas', 'level-up-alt']"
+        /></router-link>
+        <a @click="logout" class="navbar-icons-main-logo"
           ><fa :icon="['fas', 'sign-in-alt']"
         /></a>
       </div>
@@ -59,7 +81,6 @@
 </template>
 
 <script>
-
 window.onscroll = function () {
   setBackground();
 };
@@ -79,9 +100,15 @@ export default {
   name: "Navbar",
   components: {},
   props: {},
-  data() {},
-  computed: {},
-  watch: {},
+  data() {
+    return {
+     login: localStorage.getItem("UserInfo") ? true : false,
+    }
+  },
+  computed: {
+  },
+  watch: {
+  },
   mounted() {},
   methods: {
     showMenuBar() {
@@ -91,6 +118,9 @@ export default {
     setscoll() {
       document.documentElement.scrollTop = 900;
       document.body.scrollTop = 0;
+    },
+    logout() {
+      this.$store.dispatch("loginModule/logout");
     },
   },
 };
@@ -127,6 +157,7 @@ export default {
 
   &-icons-main {
     &-logo {
+      cursor: pointer;
       line-height: 95px;
       padding: 0 10px 0 10px;
       color: inherit;
