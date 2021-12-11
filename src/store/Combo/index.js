@@ -3,11 +3,7 @@ import mutations from "./mutations";
 import getters from "./getters";
 
 const state = {
-  listProductsParent: [],
-  listProductsParentLike: [],
-  listProductsChild: [],
-  listProductsNew: [],
-  listProductsHot: [],
+  listCombo: [],
 };
 export default {
   namespaced: true,

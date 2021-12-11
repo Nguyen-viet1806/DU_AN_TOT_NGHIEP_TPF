@@ -51,6 +51,30 @@
                 </p>
               </div>
             </div>
+            <div
+              v-for="card in ListCard.cartCombos"
+              :key="card"
+              class="product-pay-unit"
+            >
+              <div class="product-img">
+                <img :src="DO_MAIN + card.comboDTO.frontPhoto" />
+              </div>
+              <div class="product-info">
+                <p class="product-name">
+                  <b>{{ card.comboDTO.nameCombo }}</b>
+                  <small>Số lượng: {{ card.quantity }}</small>
+                </p>
+                <p class="product-price">
+                  <b
+                    >{{
+                      new Intl.NumberFormat("de-DE").format(
+                        card.comboDTO.price * card.quantity
+                      )
+                    }}₫</b
+                  >
+                </p>
+              </div>
+            </div>
           </div>
           <div class="pay-voucher">
             <div class="input-group">
@@ -72,7 +96,7 @@
               <p class="mt-1">Vận chuyển:</p>
             </div>
             <div class="value">
-              <p>{{ new Intl.NumberFormat("de-DE").format(allPrice) }} ₫</p>
+              <p>{{ new Intl.NumberFormat("de-DE").format(ListCard.totalMoney) }} ₫</p>
               <p class="mt-1">30.000 ₫</p>
             </div>
           </div>
@@ -82,7 +106,7 @@
             </div>
             <div class="value">
               <p>
-                {{ new Intl.NumberFormat("de-DE").format(allPrice + 30000) }} ₫
+                {{ new Intl.NumberFormat("de-DE").format(ListCard.totalMoney + 30000) }} ₫
               </p>
             </div>
           </div>
@@ -239,7 +263,7 @@ export default {
       descriptionBill: "",
       isDisabledDistrict: true,
       isDisabledCommune: true,
-       isShowNotify: false,
+      isShowNotify: false,
       infoNotify: "",
     };
   },
@@ -341,7 +365,7 @@ export default {
         .dispatch("cardModule/getDanhSachCard", payload)
         .then((res) => {
           if (res) {
-            if (this.ListCard.cartProducts.length <= 0) {
+            if (this.ListCard.cartProducts.length <= 0 && this.ListCard.cartCombos.length <= 0) {
               this.isShowNotify = true;
               this.infoNotify = "Bạn không có sản phẩm để mua !";
               setTimeout(() => {
@@ -363,7 +387,7 @@ export default {
       let day = today.getDate() > 10 ? today.getDate() : "0" + today.getDate();
       let datestring = today.getFullYear() + "-" + Month + "-" + day;
       let listProductTemp = [];
-
+      let listCombo = [];
       for (let i = 0; i < this.ListCard.cartProducts.length; i++) {
         let productTemp = {
           idProductDetail: null,
@@ -377,6 +401,19 @@ export default {
         listProductTemp.push(productTemp);
       }
 
+      for (let i = 0; i < this.ListCard.cartCombos.length; i++) {
+        let comboTemp = {
+          idCombo: null,
+          quantity: null,
+          idStatus: null,
+        };
+        comboTemp.idCombo =
+          this.ListCard.cartCombos[i].comboDTO.idCombo;
+        comboTemp.quantity = this.ListCard.cartCombos[i].quantity;
+        comboTemp.idStatus = 2;
+        listCombo.push(comboTemp);
+      }
+      
       let payload = {
         idBill: null,
         idUser: JSON.parse(localStorage.getItem("UserInfo")).idUser,
@@ -395,6 +432,7 @@ export default {
         billType: 0,
         idStatus: 6,
         listProductDetail: [...listProductTemp],
+        listCombo: [...listCombo],
         addressRequestDTO: {
           idAddress: this.idAddress,
           idProvince: this.idProvince,
@@ -403,6 +441,7 @@ export default {
           detailAddress: this.detailAddress,
         },
       };
+
       this.$store.dispatch("billModule/pay", payload).then((res) => {
         if (res) {
           this.listDistrict = [];
@@ -416,7 +455,15 @@ export default {
           this.detailAddress = null;
           this.phoneUser = "";
           this.emailUser = "";
-          this.getListCard();
+          this.isShowNotify = true;
+          this.infoNotify = "Đặt hàng thành công !";
+          setTimeout(() => {
+            this.isShowNotify = false;
+            this.infoNotify = "";
+          }, 1000);
+          setTimeout(() => {
+            this.$router.push({ path: "/bill" });
+          }, 1500);
         }
       });
     },

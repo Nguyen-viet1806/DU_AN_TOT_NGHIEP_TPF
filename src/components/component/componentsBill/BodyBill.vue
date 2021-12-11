@@ -115,6 +115,48 @@
                     </div>
                   </div>
                 </div>
+
+                <div
+                  class="product-incard mt-3"
+                  v-for="billDetail in bill.listBillComboDetail"
+                  :key="billDetail"
+                >
+                  <img
+                    class="img-product"
+                    :src="
+                      DO_MAIN + billDetail.comboResponseDTO.frontPhoto
+                    "
+                    alt=""
+                  />
+                  <div class="info-product">
+                    <div class="product-quntity">
+                      <p>
+                        Tên combo:
+                        {{ billDetail.comboResponseDTO.nameCombo }}
+                      </p>
+                      <p>
+                        Giá:
+                        {{
+                          new Intl.NumberFormat("de-DE").format(
+                            billDetail.price
+                          )
+                        }}đ
+                      </p>
+                      <p class="mt-5">Số lượng: {{ billDetail.quantity }}</p>
+                    </div>
+                    <div class="price-product">
+                      <p>
+                        Tổng:
+                        {{
+                          new Intl.NumberFormat("de-DE").format(
+                            Number(billDetail.price) *
+                              Number(billDetail.quantity)
+                          )
+                        }}đ
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="all-price-in-bill mt-2">
                 <h6>
@@ -176,9 +218,9 @@
       ></div>
       <transition name="bounce">
         <div id="popupv" v-if="isShowNotifyV" class="popupv">
-          <a class="closev" href="#" @click="closeNotifyV">&times;</a>
+          <a class="closev"  @click="closeNotifyV">&times;</a>
           <div class="contentv">
-            <show-detail-bill ref="ShowDetailBill" />
+            <show-detail-bill ref="ShowDetailBill" :bill="billTemp"/>
           </div>
         </div>
       </transition>
@@ -227,7 +269,7 @@ export default {
       this.getAllBill();
     },
     onClickShow(billTemp) {
-      this.$ref["ShowDetailBill"].bill = { ...billTemp };
+      this.billTemp = billTemp ;
       this.isShowNotifyV = true;
     },
     closeNotifyV() {
@@ -410,5 +452,8 @@ export default {
     color: white;
     background: #ee4d2d;
   }
+}
+.closev{
+  cursor: pointer;
 }
 </style>

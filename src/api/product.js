@@ -81,3 +81,10 @@ export function callApiListDislikeProduct(payload) {
   });
 }
 
+export function callApiGetListProductLike(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_PRODUCT_LIKE,
+    method: "GET",
+    params: payload,
+  });
+}

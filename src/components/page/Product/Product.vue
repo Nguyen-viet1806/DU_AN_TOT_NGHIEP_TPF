@@ -1,19 +1,26 @@
 <template>
   <div>
     <div class="vgrid news">
-      <h1 id="first-news">
+      <h1 v-if="!isLike" id="first-news">
         Product ALL!!!
         <hr />
       </h1>
+      <h1 v-else id="first-news">
+        Product Like!!!
+        <hr />
+      </h1>
       <div class="vrow">
-        <div class="vcol vl-3 vm-12 vc-12 filter">
+        <div v-if="!isLike" class="vcol vl-3 vm-12 vc-12 filter">
           <filter-product
             @search="search"
             @getProductParentFilter="getProductParentFilter"
           />
         </div>
-        <div class="vcol vl-9 vm-12 vc-12">
-          <product-all ref="productAll" @getProductParent="getProductParent" />
+        <div v-if="!isLike" class="vcol vl-9 vm-12 vc-12">
+          <product-all ref="productAll" @getProductParent="getProductParent" :ListProductsParent="ListProductsParent"/>
+        </div>
+        <div v-if="isLike" class="vcol vl-o-2 vl-8 vm-12 vc-12">
+          <product-all ref="productAll" @getProductParent="getProductParent" :ListProductsParent="ListProductsParentLike"/>
         </div>
       </div>
     </div>
@@ -23,13 +30,26 @@
 <script>
 import ProductAll from "@/components/component/componentsProduct/ProductAll.vue";
 import FilterProduct from "@/components/component/componentsProduct/FilterProduct.vue";
+import { mapGetters } from "vuex";
 export default {
   name: "Product",
   components: { ProductAll, FilterProduct },
   props: {},
   data() {},
-  computed: {},
-  watch: {},
+  computed: {
+     ...mapGetters({
+      ListProductsParent: "productModule/getListProductsParent",
+      ListProductsParentLike: "productModule/getListProductsParentLike",
+    }),
+    isLike() {
+      return this.$route.query.isLike;
+    },
+  },
+  watch: {
+    isLike(){
+      this.getProductParent();
+    }
+  },
   mounted() {
     this.initData();
   },
@@ -45,24 +65,52 @@ export default {
 
     getProductParent() {
       this.$refs["productAll"].isLoading = true;
-      let payload = {
-        userId: JSON.parse(localStorage.getItem("UserInfo")) && JSON.parse(localStorage.getItem("UserInfo")).idUser ? JSON.parse(localStorage.getItem("UserInfo")).idUser :  -1,
-        page: this.$refs["productAll"].pageable,
-        limit: 9,
-      };
-      this.$store
-        .dispatch("productModule/getListProductParent", payload)
-        .then((res) => {
-          if (res) {
-            this.$refs["productAll"].isLoading = false;
-          }
-        });
+      if (this.$route.query.isLike) {
+        console.log(123);
+        let payload = {
+          idUser:
+            JSON.parse(localStorage.getItem("UserInfo")) &&
+            JSON.parse(localStorage.getItem("UserInfo")).idUser
+              ? JSON.parse(localStorage.getItem("UserInfo")).idUser
+              : -1,
+          page: this.$refs["productAll"].pageable,
+          limit: 9,
+        };
+        this.$store
+          .dispatch("productModule/getListProductLike", payload)
+          .then((res) => {
+            if (res) {
+              this.$refs["productAll"].isLoading = false;
+            }
+          });
+      } else {
+        let payload = {
+          userId:
+            JSON.parse(localStorage.getItem("UserInfo")) &&
+            JSON.parse(localStorage.getItem("UserInfo")).idUser
+              ? JSON.parse(localStorage.getItem("UserInfo")).idUser
+              : -1,
+          page: this.$refs["productAll"].pageable,
+          limit: 9,
+        };
+        this.$store
+          .dispatch("productModule/getListProductParent", payload)
+          .then((res) => {
+            if (res) {
+              this.$refs["productAll"].isLoading = false;
+            }
+          });
+      }
     },
 
     search(name) {
       this.$refs["productAll"].isLoading = true;
       let payload = {
-        userId: JSON.parse(localStorage.getItem("UserInfo")) && JSON.parse(localStorage.getItem("UserInfo")).idUser ? JSON.parse(localStorage.getItem("UserInfo")).idUser :  -1,
+        userId:
+          JSON.parse(localStorage.getItem("UserInfo")) &&
+          JSON.parse(localStorage.getItem("UserInfo")).idUser
+            ? JSON.parse(localStorage.getItem("UserInfo")).idUser
+            : -1,
         page: this.$refs["productAll"].pageable,
         name: name,
         limit: 9,
@@ -77,7 +125,11 @@ export default {
     getProductParentFilter(param) {
       this.$refs["productAll"].isLoading = true;
       let payload = {
-        userId: JSON.parse(localStorage.getItem("UserInfo")) && JSON.parse(localStorage.getItem("UserInfo")).idUser ? JSON.parse(localStorage.getItem("UserInfo")).idUser :  -1,
+        userId:
+          JSON.parse(localStorage.getItem("UserInfo")) &&
+          JSON.parse(localStorage.getItem("UserInfo")).idUser
+            ? JSON.parse(localStorage.getItem("UserInfo")).idUser
+            : -1,
         ...param,
         page: this.$refs["productAll"].pageable,
         limit: 9,

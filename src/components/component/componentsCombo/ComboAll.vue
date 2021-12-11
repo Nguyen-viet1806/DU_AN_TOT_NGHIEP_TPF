@@ -3,11 +3,11 @@
     <loading v-if="isLoading"/>
     <div class="vrow product-all-body">
         <div
-        v-for="product in ListProductsParent"
-        :key="product"
+        v-for="combo in listCombo"
+        :key="combo"
         class="vcol vl-4 vm-4 vc-12"
       >
-        <base-product-unit :product="product" :isShowProduct="isShowProduct"/>
+        <base-product-unit :combo="combo" :isShowCombo="true"/>
       </div>
     </div>
     <div class="panigation-tpf mt-4">
@@ -47,28 +47,25 @@
 <script>
 import Loading from "@/components/common/Loading.vue";
 import BaseProductUnit from "@/components/common/BaseProductUnit.vue";
+import { mapGetters } from "vuex";
 export default {
-  name: "ProductAll",
+  name: "ComboAll",
   components: { BaseProductUnit, Loading },
-  props: {
-    ListProductsParent : {
-      type: Array,
-      default: () => []
-    }
-  },
+  props: {},
   data() {
     return {
-      isShowProduct: true,
       pageable: 0,
       isLoading: false,
     };
   },
   computed: {
-   
+    ...mapGetters({
+      listCombo: "comboModule/getListCombo",
+    }),
   },
   watch: {
     pageable(){
-      this.$emit('getProductParent')
+      this.$emit('getCombo')
     }
   },
   mounted() {},

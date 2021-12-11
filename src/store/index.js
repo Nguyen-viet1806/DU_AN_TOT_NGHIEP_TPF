@@ -7,6 +7,7 @@ import productModule from "@/store/Product";
 import cardModule from "@/store/Card";
 import billModule from "@/store/Bill";
 import loginModule from "@/store/LoginRegister";
+import comboModule from "@/store/Combo";
 import { createStore } from "vuex";
 export default new createStore({
   modules: {
@@ -19,6 +20,7 @@ export default new createStore({
     cardModule,
     billModule,
     loginModule,
+    comboModule,
   },
   state: {},
   getters: {},

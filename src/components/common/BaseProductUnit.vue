@@ -27,8 +27,20 @@
       <p>{{ product.minPrice }}.đồng ~ {{ product.maxPrice }}.đồng</p>
       <p>
         <fa class="person-favorite" :icon="['fas', 'heart']" /> Đã có
-        {{ product.like + isFavorite ? 1 : 0}} người thích
+        {{ product.like + isFavorite ? 1 : 0 }} người thích
       </p>
+    </div>
+
+    <div v-if="isShowCombo" class="product-unit">
+      <div
+        id="img-product"
+        class="product-unit-img"
+        :style="['background-image: url(' + DO_MAIN + combo.frontPhoto + ');']"
+      ></div>
+      <p class="product-unit-name" @click="onCLickCombo(combo.idCombo)">
+        {{ combo.nameCombo }}
+      </p>
+      <p>{{ combo.price }}.đồng</p>
     </div>
 
     <div v-if="isShowProductSmallFlowCategory" class="category-bottom-product">
@@ -65,6 +77,14 @@ export default {
       type: Object,
       default: () => {},
     },
+    combo: {
+      type: Object,
+      default: () => {},
+    },
+    isShowCombo: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -76,14 +96,24 @@ export default {
   watch: {},
   mounted() {},
   methods: {
-    onCLickProduct(idProduct){
-      if(idProduct){
-        this.$router.push({ 
+    onCLickProduct(idProduct) {
+      if (idProduct) {
+        this.$router.push({
           path: "/product-detail",
           query: {
-            idProduct: idProduct
+            idProduct: idProduct,
           },
-        })
+        });
+      }
+    },
+    onCLickCombo(idCombo) {
+      if (idCombo) {
+        this.$router.push({
+          path: "/combo-detail",
+          query: {
+            idCombo: idCombo,
+          },
+        });
       }
     },
     // onmouseoverImg() {
@@ -97,18 +127,16 @@ export default {
     //   imgProduct.style.backgroundImage =
     //     "url('../../assets/img/tobekind-varsity-jacket-pink-949779_1000x.jpg')";
     // },
-    listDislikeProduct(){
+    listDislikeProduct() {
       this.isFavorite = !this.isFavorite;
       let payload = {
         idUser: JSON.parse(localStorage.getItem("UserInfo"))?.idUser,
         idProduct: this.product.idProduct,
         idCombo: null,
         isLike: this.isFavorite,
-      }
-      this.$store
-        .dispatch("productModule/listDislikeProduct", payload)
+      };
+      this.$store.dispatch("productModule/listDislikeProduct", payload);
     },
-    
   },
 };
 </script>

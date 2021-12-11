@@ -46,6 +46,16 @@ const routes = [
     name: "PageBill",
     component: () => import ("@/views/PageBill.vue"),
   },
+  {
+    path: "/combo",
+    name: "PageCombo",
+    component: () => import ("@/views/PageCombo.vue"),
+  },
+  {
+    path: "/combo-detail",
+    name: "PageComboDetail",
+    component: () => import ("@/views/PageComboDetail.vue"),
+  },
 ];
 
 const router = createRouter({

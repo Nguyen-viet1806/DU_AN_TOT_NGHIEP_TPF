@@ -9,6 +9,7 @@ import {
   callApiGetListProductNew,
   callApiGetListProductFollowCategory,
   callApiListDislikeProduct,
+  callApiGetListProductLike,
 } from "@/api/product.js";
 import { callApiUploadFile } from "@/api/common.js";
 
@@ -29,6 +30,22 @@ const getListProductParent = (context, payload) => {
       .then((response) => {
         if (response) {
           context.commit("SET_LIST_PRODUCTS_PARENT", response.data.data);
+        }
+        resolve(response);
+      })
+      .catch((error) => {
+        console.log(error.config)
+        reject(error);
+      });
+  });
+};
+
+const getListProductLike = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetListProductLike(payload)
+      .then((response) => {
+        if (response) {
+          context.commit("SET_LIST_PRODUCTS_PARENT_LIKE", response.data.data);
         }
         resolve(response);
       })
@@ -191,4 +208,5 @@ export default {
   getListProductFollowCategory,
   uploadFile,
   listDislikeProduct,
+  getListProductLike,
 };

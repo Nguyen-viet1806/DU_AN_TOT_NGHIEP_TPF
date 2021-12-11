@@ -1,5 +1,7 @@
 const getListProductsParent = (state) => state.listProductsParent;
 
+const getListProductsParentLike = (state) => state.listProductsParentLike;
+
 const getListProductsChild = (state) => state.listProductsChild;
 
 const getListProductsNew = (state) => state.listProductsNew;
@@ -11,4 +13,5 @@ export default {
   getListProductsChild,
   getListProductsNew,
   getListProductsHot,
+  getListProductsParentLike,
 };

@@ -94,4 +94,12 @@ export default {
   LOGIN: "/api/webtpf/login",
   LOGOUT: "/api/webtpf/logout",
   UPDATE_PROFILE: "/api/webtpf/updateprofile",
+
+  //combo 
+  GET_ALL_COMBO: "/api/webtpf/user/combos/getall",
+  SEARCH_COMBO: "/api/webtpf/user/combos/search",
+  GET_COMBO_BY_ID: "/api/webtpf/user/combos/findbyid/",
+  ADD_COMBO: "/api/webtpf/user/carts/addcartcombo",
+  UPDATE_COMBO_IN_CART: "/api/webtpf/user/carts/updatecartcombo",
+  DELETE_COMBO_IN_CART: "/api/webtpf/user/carts/deletecartcombo",
 };

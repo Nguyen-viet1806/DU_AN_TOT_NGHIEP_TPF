@@ -38,6 +38,34 @@
                 </p>
               </div>
             </div>
+            <div
+              v-for="billDetail in bill.listBillComboDetail"
+              :key="billDetail"
+              class="product-pay-unit"
+            >
+              <div class="product-img">
+                <img
+                  :src="
+                    DO_MAIN + billDetail.comboResponseDTO.frontPhoto
+                  "
+                />
+              </div>
+              <div class="product-info">
+                <p class="product-name">
+                  <b>{{ billDetail.comboResponseDTO.nameCombo }}</b>
+                  <small>Số lượng: {{ billDetail.quantity }}</small>
+                </p>
+                <p class="product-price">
+                  <b
+                    >{{
+                      new Intl.NumberFormat("de-DE").format(
+                        billDetail.price * billDetail.quantity
+                      )
+                    }}₫</b
+                  >
+                </p>
+              </div>
+            </div>
           </div>
           <div class="pay-voucher">
             <div class="input-group">
@@ -200,6 +228,10 @@ export default {
   name: "ShowDetailBill",
   components: {},
   props: {
+    bill : {
+      type: Object,
+      default: () => {}
+    }
   },
   data() {
     return {
@@ -208,47 +240,79 @@ export default {
       listProvince: [],
       listDistrict: [],
       listCommune: [],
-      bill: {},
+      // bill: {
+      //   address: {
+      //     idAddress: null,
+      //     province: null,
+      //     district: null,
+      //     commune: null,
+      //     detailAddress: null,
+      //   },
+      //   billType: 0,
+      //   dateCreate: null,
+      //   dateSuccess: null,
+      //   deposit: 0,
+      //   descriptionBill: null,
+      //   emailUser: null,
+      //   idBill: null,
+      //   idStatus: null,
+      //   listBillProductDetail: [],
+      //   nameStatus: null,
+      //   payment: null,
+      //   phoneUser: null,
+      //   total: null,
+      //   transportFee: null,
+      //   userResponseDTO: {
+      //     idUser: null,
+      //     idChat: "",
+      //     firstName: null,
+      //     lastName: null,
+      //     dateOfBirth: null,
+      //   },
+      //   voucher: null,
+      // },
     };
   },
   computed: {},
   watch: {
     "bill.address.province.idProvince": {
       handler() {
-        if (this.idProvince.length > 0 || this.idProvince != "") {
+        if (this.bill.address.province.idProvince.length > 0 || this.bill.address.province.idProvince != "") {
           this.$store
             .dispatch("billModule/getDanhSachQuanHuyen", {
-              idProvince: Number(this.idProvince),
+              idProvince: Number(this.bill.address.province.idProvince),
             })
             .then((res) => {
               if (res) {
                 this.listDistrict = res.data.data;
               }
             });
-        } else if (this.idProvince.length == 0 || this.idProvince == "") {
+        } else if (this.bill.address.province.idProvince.length == 0 || this.bill.address.province.idProvince == "") {
           this.listDistrict = [];
         }
       },
       deep: true,
+      immediate: true,
     },
     "bill.address.district.idDistrict": {
       handler() {
-        if (this.idDistrict.length > 0 || this.idDistrict != "") {
+        if (this.bill.address.district.idDistrict.length > 0 || this.bill.address.district.idDistrict != "") {
           this.$store
             .dispatch("billModule/getDanhSachXa", {
-              idDistrict: Number(this.idDistrict),
-              idProvince: Number(this.idProvince),
+              idDistrict: Number(this.bill.address.district.idDistrict),
+              idProvince: Number(this.bill.address.province.idProvince),
             })
             .then((res) => {
               if (res) {
                 this.listCommune = res.data.data;
               }
             });
-        } else if (this.idDistrict.length == 0 || this.idDistrict == "") {
+        } else if (this.bill.address.district.idDistrict.length == 0 || this.bill.address.district.idDistrict == "") {
           this.listCommune = [];
         }
       },
       deep: true,
+      immediate: true,
     },
   },
   mounted() {

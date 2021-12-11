@@ -10,7 +10,6 @@
         Search
       </button>
     </p>
-        <p><button class="filter-product-btn" @click="getProductParentFilter(1)">Sản phẩm đã thích <fa class="person-favorite" :icon="['fas', 'heart']" /></button></p>
     <p><button class="filter-product-btn" @click="getProductParentFilter(1)">Giá thấp nhất</button></p>
     <p><button class="filter-product-btn" @click="getProductParentFilter(0)">Giá cao nhất</button></p>
     <ul class="filter-product-unit">

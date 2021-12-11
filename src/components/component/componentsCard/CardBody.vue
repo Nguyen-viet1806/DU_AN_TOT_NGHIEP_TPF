@@ -22,7 +22,7 @@
     <div class="vrow">
       <div class="vcol vl-8 vm-8 vc-12">
         <div class="card">
-          <div class="emty-cart" v-if="ListCard.cartProducts?.length <= 0">
+          <div class="emty-cart" v-if="ListCard.cartProducts?.length <= 0 && ListCard.cartCombos?.length <= 0">
             <img width="600" src="../../../assets/empty-cart.svg" />
           </div>
           <div
@@ -89,36 +89,70 @@
               </div>
             </div>
           </div>
-          <div class="panigation-tpf mt-4">
-            <nav class="Page" aria-label="Page navigation example ">
-              <ul class="pagination">
-                <li class="page-item">
-                  <a
-                    class="page-link"
-                    href="#"
-                    aria-label="Previous"
-                    v-on:click.prevent="pagePre"
+        </div>
+
+        <div class="card">
+          <div
+            class="product-incard"
+            v-for="card in ListCard.cartCombos"
+            :key="card"
+          >
+            <img
+              class="img-product"
+              :src="DO_MAIN + card.comboDTO.frontPhoto"
+              alt=""
+            />
+            <div class="info-product">
+              <div class="product-quntity">
+                <p>Tên combo: {{ card.comboDTO.nameCombo }}</p>
+                <p>Hàng còn : {{ card.comboDTO.quantity }}</p>
+                <p>
+                  Mô tả :
+                  {{
+                    card.comboDTO.descriptionCombo
+                  }}
+                </p>
+                <p>
+                  Giá:
+                  {{
+                    new Intl.NumberFormat("de-DE").format(
+                      card.comboDTO.price
+                    )
+                  }}đ
+                </p>
+                <p class="mt-5">
+                  Số lượng:
+                  <button class="btn-quantity" @click="updateCardCombo(card, 'tru')">
+                    -
+                  </button>
+                  <input
+                    class="input-quantity"
+                    type="text"
+                    v-model="card.quantity"
+                    @change="onChangeQuantityCombo(card)"
+                  />
+                  <button
+                    class="btn-quantity"
+                    @click="updateCardCombo(card, 'cong')"
                   >
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#" v-on:click.prevent="">{{
-                    pageable + 1
-                  }}</a>
-                </li>
-                <li v-if="ListCard.isNextPage" class="page-item">
-                  <a
-                    class="page-link"
-                    href="#"
-                    aria-label="Next"
-                    v-on:click.prevent="pageNext"
-                  >
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+                    +
+                  </button>
+                </p>
+                <p>
+                  Tổng:
+                  {{
+                    new Intl.NumberFormat("de-DE").format(
+                      card.comboDTO.price
+                    )
+                  }}đ
+                </p>
+              </div>
+              <div class="price-product">
+                <button class="delete-product" @click="deleteCardCombo(card)">
+                  <fa :icon="['fas', 'trash-alt']" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -171,7 +205,7 @@ export default {
       this.getListCard();
     },
     onClickPay() {
-      if (this.ListCard.cartProducts?.length <= 0) {
+      if (this.ListCard.cartProducts?.length <= 0 && this.ListCard.cartCombos?.length <= 0) {
         this.isShowNotify = true;
         this.infoNotify = "Bạn không có sản phẩm để mua !";
         setTimeout(() => {
@@ -221,6 +255,18 @@ export default {
       });
     },
 
+    onChangeQuantityCombo(CartDetal) {
+      let payload = {
+        idCartCombo: CartDetal.idCartCombo,
+          quantity: CartDetal.quantity,
+      };
+      this.$store.dispatch("comboModule/updateQuantityCartCombo", payload).then((res) => {
+        if (res) {
+          this.getListCard();
+        }
+      });
+    },
+
     getListCard() {
       let payload = {
         idCart: JSON.parse(localStorage.getItem("UserInfo"))?.idCart,
@@ -234,6 +280,16 @@ export default {
         idCartProduct: CartDetal.idCartProduct,
       };
       this.$store.dispatch("cardModule/deleteCard", payload).then((res) => {
+        if (res) {
+          this.getListCard();
+        }
+      });
+    },
+    deleteCardCombo(CartDetal) {
+      let payload = {
+        idCartCombo: CartDetal.idCartCombo,
+      };
+      this.$store.dispatch("comboModule/deleteCart", payload).then((res) => {
         if (res) {
           this.getListCard();
         }
@@ -273,6 +329,31 @@ export default {
           quantity: CartDetal.quantity,
         };
         this.$store.dispatch("cardModule/updateCard", payload).then((res) => {
+          if (res) {
+            this.getListCard();
+          }
+        });
+      }
+    },
+      updateCardCombo(CartDetal, action) {
+      let check = false;
+      if (action === "tru") {
+        if (CartDetal.quantity > 1) {
+          --CartDetal.quantity;
+          check = true;
+        }
+      } else if (action === "cong") {
+        if (CartDetal.quantity < 50) {
+          ++CartDetal.quantity;
+          check = true;
+        }
+      }
+      if (check) {
+        let payload = {
+          idCartCombo: CartDetal.idCartCombo,
+          quantity: CartDetal.quantity,
+        };
+        this.$store.dispatch("comboModule/updateQuantityCartCombo", payload).then((res) => {
           if (res) {
             this.getListCard();
           }

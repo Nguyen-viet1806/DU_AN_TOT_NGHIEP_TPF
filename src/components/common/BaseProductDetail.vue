@@ -264,10 +264,10 @@ export default {
       }
       let payload = {
         idProductDetail: this.productDetail.idProductDetail,
-        idCart: JSON.parse(localStorage.getItem("UserInfo")).idCart,
+        idCart: JSON.parse(localStorage.getItem("UserInfo"))?.idCart,
       };
       this.$store.dispatch("cardModule/addCard", payload).then((res) => {
-        if (res) {
+        if (res.status) {
           this.isShowNotify = true;
           this.infoNotify = "Sản phẩm đã được thêm vào giỏ hàng thành công";
           if (this.isShowNotify) {

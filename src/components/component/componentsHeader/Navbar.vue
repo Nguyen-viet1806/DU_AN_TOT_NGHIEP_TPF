@@ -43,7 +43,7 @@
         <router-link to="/bill" class="menu-right" href="#home"
           >Bills</router-link
         >
-        <a class="menu-right" href="#home">home</a>
+        <router-link class="menu-right" to="/combo">Combo</router-link>
         <a class="menu-right" href="#home">home</a>
       </nav>
 
@@ -51,9 +51,9 @@
         <router-link to="/profile" class="navbar-icons-main-logo"
           ><fa :icon="['fas', 'user-alt']"
         /></router-link>
-        <a href="#" class="navbar-icons-main-logo"
+        <router-link to="/product?isLike=true"  class="navbar-icons-main-logo"
           ><fa :icon="['fas', 'heart']"
-        /></a>
+        /></router-link>
         <router-link to="/card" class="navbar-icons-main-logo"
           ><fa :icon="['fas', 'shopping-cart']"
         /></router-link>
