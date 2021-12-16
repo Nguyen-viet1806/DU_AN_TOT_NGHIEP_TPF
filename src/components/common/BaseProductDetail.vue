@@ -57,6 +57,12 @@
       </div>
       <div class="vcol vl-6 vm-6 vc-12">
         <div class="product-detail-info">
+          <p v-if="productDetail.listTag?.includes(1)">
+            <span class="badge bg-warning text-dark">Sale</span>
+          </p>
+          <p v-if="productDetail.listTag?.includes(2)">
+            <span class="badge bg-danger">Hot</span>
+          </p>
           <h4 class="title">{{ productDetail.nameProduct }}</h4>
           <p class="like">
             <fa class="person-favorite" :icon="['fas', 'heart']" /> Đã có
@@ -103,7 +109,7 @@
           <p class="mt-1">
             Hàng còn:
             {{
-              productDetail.amount
+              productDetail.amount || productDetail.amount == 0 
                 ? productDetail.amount
                 : productDetail.totalProduct
             }}
@@ -113,7 +119,7 @@
             {{
               productDetail.price
                 ? productDetail.price
-                : productDetail.minPrice + "đ ~ " + productDetail.maxPrice +"đ"
+                : productDetail.minPrice + "đ ~ " + productDetail.maxPrice + "đ"
             }}
           </p>
           <p class="mt-1">Mô tả : {{ productDetail.descriptionProduct }}</p>
@@ -128,12 +134,15 @@
             <button class="btn-quantity">+</button>
           </p> -->
           <hr />
-          <p class="mb-2">
+          <p class="mb-2" v-if="productDetail.amount == 0">
+            <span class="badge bg-secondary">Sản phẩm này đã hết hàng, bạn ghé lại sau nhé !</span>
+          </p>
+          <p class="mb-2" v-if="productDetail.amount != 0">
             <button @click="addCard(false)" class="btn-add-card">
               Thêm vào giỏ hàng
             </button>
           </p>
-          <p class="mb-2">
+          <p class="mb-2" v-if="productDetail.amount != 0">
             <button @click="addCard(true)" class="btn-pay-now">Mua luôn</button>
           </p>
           <p>
@@ -237,7 +246,7 @@ export default {
         });
     },
     onClickGoProduct() {
-       document.documentElement.scrollTop = 900;
+      document.documentElement.scrollTop = 900;
       document.body.scrollTop = 0;
       this.$router.push({ path: "/product" });
     },
@@ -246,7 +255,11 @@ export default {
         idCategory: this.productDetail.categoryParentDTO.idCategory,
         page: 0,
         limit: 6,
-        userId: JSON.parse(localStorage.getItem("UserInfo")) && JSON.parse(localStorage.getItem("UserInfo")).idUser ? JSON.parse(localStorage.getItem("UserInfo")).idUser :  -1,
+        userId:
+          JSON.parse(localStorage.getItem("UserInfo")) &&
+          JSON.parse(localStorage.getItem("UserInfo")).idUser
+            ? JSON.parse(localStorage.getItem("UserInfo")).idUser
+            : -1,
       };
       this.$store.dispatch(
         "productModule/getListProductFollowCategory",
@@ -254,13 +267,13 @@ export default {
       );
     },
     addCard(paynow = false) {
-      if(!this.productDetail.idProductDetail){
+      if (!this.productDetail.idProductDetail) {
         this.isShowNotify = true;
-          this.infoNotify = "Bạn chưa chọn màu hoặc size";
-          if (this.isShowNotify) {
-            setTimeout(this.closeNotify, 1500);
-          }
-          return
+        this.infoNotify = "Bạn chưa chọn màu hoặc size";
+        if (this.isShowNotify) {
+          setTimeout(this.closeNotify, 1500);
+        }
+        return;
       }
       let payload = {
         idProductDetail: this.productDetail.idProductDetail,

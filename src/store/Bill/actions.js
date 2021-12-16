@@ -6,6 +6,8 @@ import {
   callApiGetAllBill,
   callApiHuyBill,
   callApiGetListBillSort,
+  callApiGetListVoucher,
+  callApiGetVoucherCanDonate,
 } from "@/api/bill.js";
 
 const getDanhSachTinh = (context, payload) => {
@@ -98,6 +100,30 @@ const huyBill = (context, payload) => {
       });
   });
 };
+
+const getListVoucher = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetListVoucher(payload)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const getVoucherCanDonate = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetVoucherCanDonate(payload)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
 export default {
   getDanhSachTinh,
   getDanhSachQuanHuyen,
@@ -106,4 +132,6 @@ export default {
   getAllBill,
   huyBill,
   getListBillSort,
+  getListVoucher,
+  getVoucherCanDonate,
 };

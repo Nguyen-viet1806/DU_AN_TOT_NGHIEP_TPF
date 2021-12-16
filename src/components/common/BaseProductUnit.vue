@@ -8,6 +8,8 @@
           'background-image: url(' + DO_MAIN + product.frontPhoto + ');',
         ]"
       >
+       <p v-if="product.listTag.includes(1)" class="sale-product"><span class="badge bg-warning text-dark">Sale</span></p>
+        <p v-if="product.listTag.includes(2)" class="sale-product"><span class="badge bg-danger">Hot</span></p>
         <div class="favorite" v-on:click="listDislikeProduct">
           <fa
             v-if="isFavorite"
@@ -166,6 +168,8 @@ export default {
     }
   }
   &-name {
+    font-weight: bold;
+    color: #0cb4ce !important;
     cursor: pointer;
     &:hover {
       font-size: 18px;
@@ -220,5 +224,12 @@ export default {
   100% {
     transform: translate(1px, -2px) rotate(-1deg);
   }
+}
+.sale-product{
+  width: 10%;
+  z-index: 998;
+}
+.badge{
+  padding: 5px 15px 5px 15px;
 }
 </style>

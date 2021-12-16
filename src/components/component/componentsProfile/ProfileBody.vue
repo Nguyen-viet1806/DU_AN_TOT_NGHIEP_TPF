@@ -169,7 +169,11 @@
             </div>
 
             <div class="mt-5 text-center">
-              <button class="btn btn-primary profile-button" type="submit">
+              <button
+                @click="UpdateProfile"
+                class="btn btn-primary profile-button"
+                type="submit"
+              >
                 Save Profile
               </button>
             </div>
@@ -185,10 +189,7 @@
                 experience
               "
             >
-              <span>Đổi mật khẩu</span
-              ><span class="border px-3 p-1 add-experience"
-                ><i class="fa fa-plus"></i>&nbsp;Đổi mật khẩu</span
-              >
+              <span>Đổi mật khẩu</span>
             </div>
             <br />
             <div class="col-md-12">
@@ -221,6 +222,11 @@
                 value=""
                 required
               />
+            </div>
+            <div class="btn-dpass">
+              <span class="border px-3 p-1 add-experience"
+                ><i class="fa fa-plus"></i>&nbsp;Đổi mật khẩu</span
+              >
             </div>
           </div>
         </div>
@@ -320,9 +326,7 @@ export default {
       deep: true,
     },
   },
-  created(){
-    
-  },
+  created() {},
   mounted() {
     this.initData();
   },
@@ -334,9 +338,9 @@ export default {
       document.body.scrollTop = 0;
     },
     getInfoUser() {
-      if(JSON.parse(localStorage.getItem("UserInfo")) == null){
-       this.$router.push({ path: "/login" });
-       return
+      if (JSON.parse(localStorage.getItem("UserInfo")) == null) {
+        this.$router.push({ path: "/login" });
+        return;
       }
       let users = JSON.parse(localStorage.getItem("UserInfo"));
       this.user = {
@@ -347,7 +351,7 @@ export default {
         email: users.email,
         phoneNumber: users.phoneNumber,
         passwordUser: "",
-        idGender: users.genderDTO.idGender,
+        idGender: users.genderDTO?.idGender,
         idAddress: null,
         imageUser: users.imageUser,
         addressRequestDTO: {
@@ -366,9 +370,34 @@ export default {
         }
       });
     },
-    // UpdateProfile(){
-    //   this.$store.dispatch("loginModule/UpdateProfile", payload)
-    // }
+    async uploadFile(file) {
+      const fd = new FormData();
+      fd.append("file", file);
+      let img;
+      await this.$store.dispatch("productModule/uploadFile", fd).then((res) => {
+        if (res) {
+          img = res.data;
+        }
+      });
+      return img;
+    },
+    async UpdateProfile() {
+      if (typeof this.user.imageUser == "object") {
+        this.user.imageUser = await this.uploadFile(this.user.imageUser);
+      }
+      this.$store
+        .dispatch("loginModule/UpdateProfile", this.user)
+        .then((res) => {
+          if (res) {
+            localStorage.setItem(
+              "UserInfo",
+              JSON.stringify({
+                ...JSON.parse(localStorage.getItem("UserInfo")),...res.data.data
+              })
+            );
+          }
+        });
+    },
   },
 };
 </script>
@@ -417,5 +446,8 @@ body {
   color: #fff;
   cursor: pointer;
   border: solid 1px #ba68c8;
+}
+.btn-dpass {
+  margin-top: 15px;
 }
 </style>

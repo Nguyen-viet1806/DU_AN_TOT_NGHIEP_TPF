@@ -1,5 +1,36 @@
 <template>
   <div class="vgrid pay">
+    <div class="notifyv">
+      <div
+        id="popupv"
+        v-if="isShowNotifyV"
+        class="overlayv"
+        @click="closeNotifyV"
+      ></div>
+      <transition name="bounce">
+        <div id="popupv" v-if="isShowNotifyV" class="popupv">
+          <a class="closev" @click="closeNotifyV">&times;</a>
+          <div class="contentv">
+            <div class="vrow">
+              <div class="vcol vl-6 vm-6 vc-12">
+                <div class="voucher">
+                  <img
+                    class="icon"
+                    src="@/assets/logoTpf.svg"
+                    width="45"
+                    height="45"
+                  />
+                  <p>Voucher <fa :icon="['fas', 'tags']" /> giảm giá 10%</p>
+                  <p class="btn-addVoucher">
+                    <button class="btn btn-danger">Chọn voucher</button>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </div>
     <div class="notify">
       <div
         id="popup1"
@@ -76,10 +107,23 @@
               </div>
             </div>
           </div>
+          <p
+            v-if="voucherCanDonate != null && voucherCanDonate != {}"
+            class="voucherDonate"
+          >
+            Mua thêm
+            {{
+              new Intl.NumberFormat("de-DE").format(
+                Number(voucherCanDonate.condition) - Number(ListCard.totalMoney)
+              )
+            }}đ để được tặng voucher giảm giá {{ voucherCanDonate.discount }}%
+          </p>
           <div class="pay-voucher">
             <div class="input-group">
               <input
                 type="search"
+                @focus="onFocusVoucher"
+                v-model="voucher"
                 class="form-control rounded"
                 placeholder="Mã giảm giá"
                 aria-label="Search"
@@ -96,7 +140,10 @@
               <p class="mt-1">Vận chuyển:</p>
             </div>
             <div class="value">
-              <p>{{ new Intl.NumberFormat("de-DE").format(ListCard.totalMoney) }} ₫</p>
+              <p>
+                {{ new Intl.NumberFormat("de-DE").format(ListCard.totalMoney) }}
+                ₫
+              </p>
               <p class="mt-1">30.000 ₫</p>
             </div>
           </div>
@@ -106,7 +153,12 @@
             </div>
             <div class="value">
               <p>
-                {{ new Intl.NumberFormat("de-DE").format(ListCard.totalMoney + 30000) }} ₫
+                {{
+                  new Intl.NumberFormat("de-DE").format(
+                    ListCard.totalMoney + 30000
+                  )
+                }}
+                ₫
               </p>
             </div>
           </div>
@@ -224,8 +276,8 @@
             </div>
 
             <p class="mb-2" v-if="!isSuDungThongTinDaluu">
-              <input type="checkbox" v-model="isLuuThongtinChoLanSau" /> Lưu
-              thông tin này làm thông tin cá nhân!
+              <input type="checkbox" v-model="isLuuThongtinChoLanSau" /> Lưu địa
+              chỉ này làm thông tin cá nhân!
             </p>
             <div class="col-12">
               <button class="btn btn-pay" type="submit">Thanh toán</button>
@@ -246,10 +298,14 @@ export default {
   props: {},
   data() {
     return {
+      listVoucherUser: [],
+      isShowNotifyV: false,
       isSuDungThongTinDaluu: false,
       isLuuThongtinChoLanSau: false,
       allPrice: 0,
       DO_MAIN,
+      voucherCanDonate: {},
+      voucher: "",
       listProvince: [],
       listDistrict: [],
       listCommune: [],
@@ -340,6 +396,22 @@ export default {
       this.getListCard();
       this.getListTinh();
     },
+    closeNotifyV() {
+      this.isShowNotifyV = false;
+    },
+    onFocusVoucher() {
+      this.isShowNotifyV = true;
+      let payload = {
+        idUser: JSON.parse(localStorage.getItem("UserInfo")).idUser,
+        page: 0,
+        limit: 100000000,
+      };
+      this.$store.dispatch("billModule/getListVoucher", payload).then((res) => {
+        if (res) {
+          this.listVoucherUser = res.data.data;
+        }
+      });
+    },
     getListTinh() {
       this.$store.dispatch("billModule/getDanhSachTinh").then((res) => {
         if (res) {
@@ -365,7 +437,10 @@ export default {
         .dispatch("cardModule/getDanhSachCard", payload)
         .then((res) => {
           if (res) {
-            if (this.ListCard.cartProducts.length <= 0 && this.ListCard.cartCombos.length <= 0) {
+            if (
+              this.ListCard.cartProducts.length <= 0 &&
+              this.ListCard.cartCombos.length <= 0
+            ) {
               this.isShowNotify = true;
               this.infoNotify = "Bạn không có sản phẩm để mua !";
               setTimeout(() => {
@@ -377,6 +452,16 @@ export default {
               }, 1500);
               return;
             }
+            let p = {
+              totalMoney: this.ListCard.totalMoney,
+            };
+            this.$store
+              .dispatch("billModule/getVoucherCanDonate", p)
+              .then((res) => {
+                if (res) {
+                  this.voucherCanDonate = res.data.data;
+                }
+              });
             this.getPriceAll();
           }
         });
@@ -407,13 +492,12 @@ export default {
           quantity: null,
           idStatus: null,
         };
-        comboTemp.idCombo =
-          this.ListCard.cartCombos[i].comboDTO.idCombo;
+        comboTemp.idCombo = this.ListCard.cartCombos[i].comboDTO.idCombo;
         comboTemp.quantity = this.ListCard.cartCombos[i].quantity;
         comboTemp.idStatus = 2;
         listCombo.push(comboTemp);
       }
-      
+
       let payload = {
         idBill: null,
         idUser: JSON.parse(localStorage.getItem("UserInfo")).idUser,
@@ -427,8 +511,7 @@ export default {
         deposit: 0,
         payment: this.allPrice,
         transportFee: 30000,
-        idVoucher: null,
-        codeVoucher: null,
+        voucher: this.voucher,
         billType: 0,
         idStatus: 6,
         listProductDetail: [...listProductTemp],
@@ -444,19 +527,47 @@ export default {
 
       this.$store.dispatch("billModule/pay", payload).then((res) => {
         if (res) {
-          this.listDistrict = [];
-          this.listCommune = [];
-          this.idAddress = null;
-          this.idProvince = "";
-          this.idDistrict = "";
-          this.idCommune = "";
-          this.isDisabledDistrict = true;
-          this.isDisabledCommune = true;
-          this.detailAddress = null;
-          this.phoneUser = "";
-          this.emailUser = "";
-          this.isShowNotify = true;
-          this.infoNotify = "Đặt hàng thành công !";
+          if (this.isLuuThongtinChoLanSau) {
+            let users = JSON.parse(localStorage.getItem("UserInfo"));
+            let userTemp = {
+              idUser: users.idUser,
+              firstName: users.firstName,
+              lastName: users.firstName,
+              dateOfBirth: users.dateOfBirth,
+              email: users.email,
+              phoneNumber: users.phoneNumber,
+              passwordUser: "",
+              idGender: users.genderDTO.idGender,
+              idAddress: null,
+              imageUser: users.imageUser,
+              addressRequestDTO: {
+                idAddress: this.idAddress,
+                idProvince: this.idProvince,
+                idDistrict: this.idDistrict,
+                idCommune: this.idCommune,
+                detailAddress: this.detailAddress,
+              },
+            };
+            this.$store
+              .dispatch("loginModule/UpdateProfile", userTemp)
+              .then((res) => {
+                if (res) {
+                  this.listDistrict = [];
+                  this.listCommune = [];
+                  this.idAddress = null;
+                  this.idProvince = "";
+                  this.idDistrict = "";
+                  this.idCommune = "";
+                  this.isDisabledDistrict = true;
+                  this.isDisabledCommune = true;
+                  this.detailAddress = null;
+                  this.phoneUser = "";
+                  this.emailUser = "";
+                  this.isShowNotify = true;
+                  this.infoNotify = "Đặt hàng thành công !";
+                }
+              });
+          }
           setTimeout(() => {
             this.isShowNotify = false;
             this.infoNotify = "";
@@ -568,5 +679,37 @@ export default {
   background: black;
   color: white;
   font-weight: 500;
+}
+.voucherDonate {
+  color: red;
+}
+.closev {
+  cursor: pointer;
+}
+.popupv {
+  box-shadow: #b0b7bd 0px 2px 15px 0px;
+  visibility: visible;
+  opacity: 1;
+  padding: 30px;
+  background: #fff;
+  border-radius: 5px;
+  width: 35%;
+  position: fixed;
+  top: 110px;
+  left: 32%;
+  transition: all 1s ease-in-out;
+  z-index: 1002;
+}
+.voucher {
+  width: 230px;
+  height: 150px;
+  line-height: 2;
+  background: orange;
+  border-radius: 10px;
+  border: 2px double #0cb4ce;
+}
+.btn-addVoucher {
+  margin-top: 10px;
+  text-align: center;
 }
 </style>

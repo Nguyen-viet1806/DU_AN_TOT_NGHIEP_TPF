@@ -55,3 +55,19 @@ export function callApiHuyBill(payload) {
     data: payload
   });
 }
+
+export function callApiGetListVoucher(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_VOUCHER,
+    method: "GET",
+    params: payload
+  });
+}
+
+export function callApiGetVoucherCanDonate(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_VOUCHER_CAN_DONATE,
+    method: "GET",
+    params: payload
+  });
+}

@@ -88,6 +88,8 @@ export default {
   GET_ALL_BILL: "/api/webtpf/user/bills/getalllistuser",
   HUY_BILL: "/api/webtpf/user/bills/cancel",
   GET_LIST_BILL_SORT: "/api/webtpf/user/bills/getalllistandfilteruser",
+  GET_LIST_VOUCHER: "/api/webtpf/user/voucheruser/getlist",
+  GET_VOUCHER_CAN_DONATE: "/api/webtpf/user/voucheruser/getdonate",
 
   //login
   REGISTER: "/api/webtpf/signup",
