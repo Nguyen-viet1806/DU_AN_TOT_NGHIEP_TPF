@@ -2,6 +2,7 @@
   <div>
     <navbar />
     <banner />
+    <!-- <div class="bchat" ><embed  src="http://localhost:3000/"  width="400px" height="450px"/></div> -->
     <router-view />
     <Footer />
   </div>
@@ -19,7 +20,11 @@ export default {
   computed: {},
   watch: {},
   mounted() {},
-  methods: {},
+  methods: {
+    test(){
+      console.log(123);
+    }
+  },
 };
 </script>
 
@@ -184,5 +189,12 @@ html {
   &::-webkit-scrollbar-thumb:hover {
     background: #d4aa70;
   }
+}
+.bchat{
+  position: fixed;
+  bottom: 0.8%;
+  right: 6%;
+  z-index: 100000;
+  border-radius: 5px;
 }
 </style>

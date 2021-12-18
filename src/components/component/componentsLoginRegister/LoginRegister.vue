@@ -28,7 +28,7 @@
                   class="img-register"
                   width="200"
                   id="uploadPreview"
-                  src="https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/255564344_143770554654290_1193058347034615287_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=730e14&_nc_ohc=8Jo-wYKnpW0AX-h9mYW&_nc_ht=scontent.fhan14-1.fna&oh=a97e74c5b1eb3b19a4c417ca36eb9994&oe=61947090"
+                  src=""
                 />
                 <div class="input-group mb-2">
                   <input

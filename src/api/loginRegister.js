@@ -35,3 +35,20 @@ export function callApiUpdateProfile(payload) {
     data: payload,
   });
 }
+
+export function callApiChangePassword(payload) {
+  return HTTP({
+    url: ENDPOINT.CHANGE_PASSWORD,
+    method: "POST",
+    data: payload,
+  });
+}
+
+
+export function callApiResetPass(payload) {
+  return HTTP({
+    url: ENDPOINT.RESET_PASSWORD,
+    method: "GET",
+    params: payload,
+  });
+}

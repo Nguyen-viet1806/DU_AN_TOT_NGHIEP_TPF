@@ -3,6 +3,8 @@ import {
   callApiLogout,
   callApiLogin,
   callApiUpdateProfile,
+  callApiChangePassword,
+  callApiResetPass,
 } from "@/api/loginRegister.js";
 
 
@@ -54,9 +56,34 @@ const UpdateProfile = (context, payload) => {
   });
 };
 
+const changePassword = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiChangePassword(payload)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const resetPass = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiResetPass(payload)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
 export default {
   register,
   logout,
   Login,
   UpdateProfile,
+  changePassword,
+  resetPass,
 };

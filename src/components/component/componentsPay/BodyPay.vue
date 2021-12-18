@@ -563,11 +563,11 @@ export default {
                   this.detailAddress = null;
                   this.phoneUser = "";
                   this.emailUser = "";
-                  this.isShowNotify = true;
-                  this.infoNotify = "Đặt hàng thành công !";
                 }
               });
           }
+          this.isShowNotify = true;
+          this.infoNotify = "Đặt hàng thành công !";
           setTimeout(() => {
             this.isShowNotify = false;
             this.infoNotify = "";

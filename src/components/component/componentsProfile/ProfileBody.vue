@@ -1,21 +1,19 @@
 <template>
   <div class="container rounded bg-white mt-5 mb-5">
-    <form @submit="onSubmit">
-      <div class="row">
-        <div class="col-md-3 border-right">
-          <div
-            class="d-flex flex-column align-items-center text-center p-3 py-5"
-          >
-            <img
-              width="200"
-              class="rounded-circle mt-5"
-              :src="DO_MAIN + user.imageUser"
-            /><span class="font-weight-bold">{{ user.lastName }}</span
-            ><span class="text-black-50">{{ user.email }}</span
-            ><span> </span>
-          </div>
+    <div class="row">
+      <div class="col-md-3 border-right">
+        <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+          <img
+            width="200"
+            class="rounded-circle mt-5"
+            :src="DO_MAIN + user.imageUser"
+          /><span class="font-weight-bold">{{ user.lastName }}</span
+          ><span class="text-black-50">{{ user.email }}</span
+          ><span> </span>
         </div>
-        <div class="col-md-5 border-right">
+      </div>
+      <div class="col-md-5 border-right">
+        <form @submit.prevent="UpdateProfile">
           <div class="p-3 py-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h4 class="text-right">Thông tin cá nhân</h4>
@@ -169,69 +167,86 @@
             </div>
 
             <div class="mt-5 text-center">
-              <button
-                @click="UpdateProfile"
-                class="btn btn-primary profile-button"
-                type="submit"
-              >
+              <button class="btn btn-primary profile-button" type="submit">
                 Save Profile
               </button>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
+        </form>
+      </div>
+      <div class="col-md-4">
           <div class="p-3 py-5">
-            <div
-              class="
-                d-flex
-                justify-content-between
-                align-items-center
-                experience
-              "
-            >
-              <span>Đổi mật khẩu</span>
-            </div>
-            <br />
-            <div class="col-md-12">
-              <label class="labels">Mật khẩu cũ</label
-              ><input
-                type="text"
-                class="form-control"
-                placeholder="Mật khẩu cũ"
-                value=""
-                required
-              />
-            </div>
-            <br />
-            <div class="col-md-12">
-              <label class="labels">Mật khẩu mới</label
-              ><input
-                type="text"
-                class="form-control"
-                placeholder="Mật khẩu mới"
-                value=""
-                required
-              />
-            </div>
-            <div class="col-md-12">
-              <label class="labels">Nhập lại mật khẩu mới</label
-              ><input
-                type="text"
-                class="form-control"
-                placeholder="Nhập lại mật khẩu mới"
-                value=""
-                required
-              />
-            </div>
-            <div class="btn-dpass">
-              <span class="border px-3 p-1 add-experience"
-                ><i class="fa fa-plus"></i>&nbsp;Đổi mật khẩu</span
+            <form @submit.prevent="changePassword">
+              <div
+                class="
+                  d-flex
+                  justify-content-between
+                  align-items-center
+                  experience
+                "
               >
-            </div>
+                <span>Đổi mật khẩu</span>
+              </div>
+              <br />
+              <div class="col-md-12">
+                <label class="labels">Mật khẩu cũ</label
+                ><input
+                  type="password"
+                  class="form-control"
+                  placeholder="Mật khẩu cũ"
+                  v-model="passCu"
+                  required
+                />
+              </div>
+              <br />
+              <div class="col-md-12">
+                <label class="labels">Mật khẩu mới</label
+                ><input
+                  type="password"
+                  class="form-control"
+                  placeholder="Mật khẩu mới"
+                  v-model="passMoi"
+                  required
+                />
+              </div>
+              <div class="col-md-12">
+                <label class="labels">Nhập lại mật khẩu mới</label
+                ><input
+                  type="password"
+                  class="form-control"
+                  placeholder="Nhập lại mật khẩu mới"
+                  v-model="passMoiXacNhan"
+                  required
+                />
+              </div>
+              <div class="btn-dpass">
+                <button type="submit">
+                  <span class="border px-3 p-1 add-experience"
+                    ><i class="fa fa-plus"></i>&nbsp;Đổi mật khẩu</span
+                  >
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-      </div>
-    </form>
+    </div>
+    <div class="notify">
+      <div
+        id="popup1"
+        v-if="isShowNotify"
+        class="overlay"
+        @click="closeNotify"
+      ></div>
+      <transition name="bounce">
+        <div id="popup1" v-if="isShowNotify" class="popup">
+          <h2>Thông báo:</h2>
+          <a class="close" href="#" @click="closeNotify">&times;</a>
+          <div class="content">
+            {{ infoNotify }}
+          </div>
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -244,6 +259,7 @@ export default {
   data() {
     return {
       DO_MAIN,
+      isShowNotify: false,
       isDisabledDistrict: true,
       isDisabledCommune: true,
       listProvince: [],
@@ -268,6 +284,9 @@ export default {
           detailAddress: "",
         },
       },
+      passCu: "",
+      passMoi: "",
+      passMoiXacNhan: "",
     };
   },
   computed: {},
@@ -363,6 +382,47 @@ export default {
         },
       };
     },
+        changePassword() {
+      if (this.passMoi != this.passMoiXacNhan) {
+        this.isShowNotify = true;
+        this.infoNotify = "Xác nhận mật khẩu mới không khớp!";
+        setTimeout(() => {
+          this.isShowNotify = false;
+          this.infoNotify = "";
+        }, 1000);
+        return;
+      }
+      let payload = {
+        idUser: JSON.parse(localStorage.getItem("UserInfo")).idUser,
+        oldPassword: this.passCu,
+        newPassword: this.passMoi,
+      };
+      this.$store
+        .dispatch("loginModule/changePassword", payload)
+        .then((res) => {
+          if (res) {
+            this.isShowNotify = true;
+            this.infoNotify = "Đổi mật khẩu thành công!";
+            setTimeout(() => {
+              this.isShowNotify = false;
+              this.infoNotify = "";
+            }, 1000);
+            this.passCu = "";
+            this.passMoi = "";
+            this.passMoiXacNhan = "";
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            this.isShowNotify = true;
+            this.infoNotify = "Đổi mật khẩu thất bại!";
+            setTimeout(() => {
+              this.isShowNotify = false;
+              this.infoNotify = "";
+            }, 1000);
+          }
+        });
+    },
     getListTinh() {
       this.$store.dispatch("billModule/getDanhSachTinh").then((res) => {
         if (res) {
@@ -389,10 +449,18 @@ export default {
         .dispatch("loginModule/UpdateProfile", this.user)
         .then((res) => {
           if (res) {
+            this.isShowNotify = true;
+              this.infoNotify = "Lưu thông tin thành công!";
+              setTimeout(() => {
+                this.isShowNotify = false;
+                this.infoNotify = "";
+              }, 1000);
             localStorage.setItem(
               "UserInfo",
               JSON.stringify({
-                ...JSON.parse(localStorage.getItem("UserInfo")),...res.data.data
+                ...JSON.parse(localStorage.getItem("UserInfo")),
+                ...res.data.data,
+                idRole: JSON.parse(localStorage.getItem("UserInfo")).idRole,
               })
             );
           }

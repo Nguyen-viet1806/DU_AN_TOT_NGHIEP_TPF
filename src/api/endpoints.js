@@ -96,7 +96,8 @@ export default {
   LOGIN: "/api/webtpf/login",
   LOGOUT: "/api/webtpf/logout",
   UPDATE_PROFILE: "/api/webtpf/updateprofile",
-
+  RESET_PASSWORD: "/api/webtpf/profile/getnewpassword",
+  CHANGE_PASSWORD: "/api/webtpf/profile/changepassword",  
   //combo 
   GET_ALL_COMBO: "/api/webtpf/user/combos/getall",
   SEARCH_COMBO: "/api/webtpf/user/combos/search",

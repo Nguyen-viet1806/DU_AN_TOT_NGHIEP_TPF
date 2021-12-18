@@ -6,7 +6,6 @@
     <base-slide-product v-bind:isShowSlideProductNew="isShowSlideProductNew" />
     <base-category-bottom />
     <base-news-bottom />
-    <!-- <embed src="https://webcoban.vn/html/the-embed-trong-html.html"  width="500px" height="400px"/> -->
   </section>
 </template>
 
