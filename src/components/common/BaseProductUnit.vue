@@ -29,7 +29,7 @@
       <p>{{ product.minPrice }}.đồng ~ {{ product.maxPrice }}.đồng</p>
       <p>
         <fa class="person-favorite" :icon="['fas', 'heart']" /> Đã có
-        {{ product.like + isFavorite ? 1 : 0 }} người thích
+        {{ product.like + (isFavorite ? 1 : 0) }} người thích
       </p>
     </div>
 
@@ -94,8 +94,10 @@ export default {
       isFavorite: this.product?.isLike,
     };
   },
-  computed: {},
-  watch: {},
+  computed: {
+  },
+  watch: {
+  },
   mounted() {},
   methods: {
     onCLickProduct(idProduct) {

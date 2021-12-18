@@ -15,7 +15,7 @@
             {{ infoNotify }}
           </div>
         </div>
-      </transition>
+      </transition> 
     </div>
     <h3 class="title">Giỏ hàng</h3>
     <!-- <a>Tiếp tục mua hàng</a> -->
@@ -77,7 +77,7 @@
                   Tổng:
                   {{
                     new Intl.NumberFormat("de-DE").format(
-                      card.productDetailDTO.price
+                      card.productDetailDTO.price * card.quantity
                     )
                   }}đ
                 </p>

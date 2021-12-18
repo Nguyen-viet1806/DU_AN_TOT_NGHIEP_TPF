@@ -109,7 +109,7 @@
           <p class="mt-1">
             Hàng còn:
             {{
-              productDetail.amount || productDetail.amount == 0 
+              productDetail.amount || productDetail.amount == 0
                 ? productDetail.amount
                 : productDetail.totalProduct
             }}
@@ -135,7 +135,9 @@
           </p> -->
           <hr />
           <p class="mb-2" v-if="productDetail.amount == 0">
-            <span class="badge bg-secondary">Sản phẩm này đã hết hàng, bạn ghé lại sau nhé !</span>
+            <span class="badge bg-secondary"
+              >Sản phẩm này đã hết hàng, bạn ghé lại sau nhé !</span
+            >
           </p>
           <p class="mb-2" v-if="productDetail.amount != 0">
             <button @click="addCard(false)" class="btn-add-card">
@@ -175,8 +177,15 @@ export default {
       infoNotify: "",
     };
   },
-  computed: {},
+  computed: {
+    isProductRouter() {
+      return this.$route.query.idProduct;
+    },
+  },
   watch: {
+    isProductRouter() {
+      this.getProductDetail();
+    },
     colorProduct() {
       if (this.colorProduct !== null) {
         let payload = {
@@ -234,12 +243,14 @@ export default {
     },
     getProductDetail() {
       let payload = {
-        idProduct: this.$route.query.idProduct,
+        idProduct: this.isProductRouter,
       };
       this.$store
         .dispatch("productModule/getProductDetail", payload)
         .then((res) => {
           if (res) {
+            document.documentElement.scrollTop = 900;
+            document.body.scrollTop = 0;
             this.productDetail = res.data.data;
             this.getListProductWithCategory();
           }
