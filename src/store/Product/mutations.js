@@ -18,10 +18,15 @@ const SET_LIST_PRODUCTS_HOT = (state, listProductsHot) => {
     state.listProductsHot = listProductsHot;
 } 
 
+const SET_LIST_PRODUCTS_SALE = (state, listProductSale) => {
+    state.listProductSale = listProductSale;
+} 
+
 export default {
     SET_LIST_PRODUCTS_PARENT,
     SET_LIST_PRODUCTS_CHILD,
     SET_LIST_PRODUCTS_NEW,
     SET_LIST_PRODUCTS_HOT,
     SET_LIST_PRODUCTS_PARENT_LIKE,
+    SET_LIST_PRODUCTS_SALE,
   };

@@ -1,26 +1,45 @@
 <template>
   <div>
     <div class="vgrid news">
-      <h1 v-if="!isLike" id="first-news">
-        Product ALL!!!
-        <hr />
-      </h1>
-      <h1 v-else id="first-news">
+      <h1 v-if="isLike" id="first-news">
         Product Like!!!
         <hr />
       </h1>
+      <h1 v-else-if="isSale" id="first-news">
+        Product Sale!!!
+        <hr />
+      </h1>
+      <h1 v-else id="first-news">
+        Product All!!!
+        <hr />
+      </h1>
       <div class="vrow">
-        <div v-if="!isLike" class="vcol vl-3 vm-12 vc-12 filter">
+        <div v-if="!isLike && !isSale" class="vcol vl-3 vm-12 vc-12 filter">
           <filter-product
             @search="search"
             @getProductParentFilter="getProductParentFilter"
           />
         </div>
-        <div v-if="!isLike" class="vcol vl-9 vm-12 vc-12">
-          <product-all ref="productAll" @getProductParent="getProductParent" :ListProductsParent="ListProductsParent"/>
+         <div v-if="isLike" class="vcol vl-o-2 vl-8 vm-12 vc-12">
+          <product-all
+            ref="productAll"
+            @getProductParent="getProductParent"
+            :ListProductsParent="ListProductsParentLike"
+          />
         </div>
-        <div v-if="isLike" class="vcol vl-o-2 vl-8 vm-12 vc-12">
-          <product-all ref="productAll" @getProductParent="getProductParent" :ListProductsParent="ListProductsParentLike"/>
+        <div v-else-if="isSale" class="vcol vl-o-2 vl-8 vm-12 vc-12">
+          <product-all
+            ref="productAll"
+            @getProductParent="getProductParent"
+            :ListProductsParent="ListProductsSale"
+          />
+        </div>
+        <div v-else class="vcol vl-9 vm-12 vc-12">
+          <product-all
+            ref="productAll"
+            @getProductParent="getProductParent"
+            :ListProductsParent="ListProductsParent"
+          />
         </div>
       </div>
     </div>
@@ -37,18 +56,25 @@ export default {
   props: {},
   data() {},
   computed: {
-     ...mapGetters({
+    ...mapGetters({
       ListProductsParent: "productModule/getListProductsParent",
       ListProductsParentLike: "productModule/getListProductsParentLike",
+      ListProductsSale: "productModule/getListProductsSale",
     }),
     isLike() {
       return this.$route.query.isLike;
     },
+    isSale() {
+      return this.$route.query.isSale;
+    },
   },
   watch: {
-    isLike(){
+    isLike() {
       this.getProductParent();
-    }
+    },
+    isSale() {
+      this.getProductParent();
+    },
   },
   mounted() {
     this.initData();
@@ -66,7 +92,6 @@ export default {
     getProductParent() {
       this.$refs["productAll"].isLoading = true;
       if (this.$route.query.isLike) {
-        console.log(123);
         let payload = {
           idUser:
             JSON.parse(localStorage.getItem("UserInfo")) &&
@@ -83,7 +108,25 @@ export default {
               this.$refs["productAll"].isLoading = false;
             }
           });
+      } else if (this.$route.query.isSale) {
+        let payload = {
+          userId:
+            JSON.parse(localStorage.getItem("UserInfo")) &&
+            JSON.parse(localStorage.getItem("UserInfo")).idUser
+              ? JSON.parse(localStorage.getItem("UserInfo")).idUser
+              : -1,
+          page: this.$refs["productAll"].pageable,
+          limit: 9,
+        };
+        this.$store
+          .dispatch("productModule/getListProductSale", payload)
+          .then((res) => {
+            if (res) {
+              this.$refs["productAll"].isLoading = false;
+            }
+          });
       } else {
+        console.log(1231231231231231231238888);
         let payload = {
           userId:
             JSON.parse(localStorage.getItem("UserInfo")) &&

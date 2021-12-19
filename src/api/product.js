@@ -88,3 +88,11 @@ export function callApiGetListProductLike(payload) {
     params: payload,
   });
 }
+
+export function callApiGetListProductSale(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_PRODUCT_SALE,
+    method: "GET",
+    params: payload,
+  });
+}

@@ -8,10 +8,13 @@ const getListProductsNew = (state) => state.listProductsNew;
 
 const getListProductsHot = (state) => state.listProductsHot;
 
+const getListProductsSale = (state) => state.listProductSale;
+
 export default {
   getListProductsParent,
   getListProductsChild,
   getListProductsNew,
   getListProductsHot,
   getListProductsParentLike,
+  getListProductsSale,
 };

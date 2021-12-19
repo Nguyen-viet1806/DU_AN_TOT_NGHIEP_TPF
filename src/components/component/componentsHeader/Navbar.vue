@@ -37,14 +37,14 @@
           href="#home"
           >News</router-link
         >
-        <a href="#home" id="logo"
+        <router-link to="/" href="#home" id="logo"
           ><img class="icon" src="@/assets/logoTpf.svg" width="45" height="45"
-        /></a>
-        <router-link to="/bill" class="menu-right" href="#home"
+        /></router-link>
+        <router-link to="/bill" class="menu-right" 
           >Bills</router-link
         >
-        <router-link class="menu-right" to="/combo">Combo</router-link>
-        <a class="menu-right" href="#home">home</a>
+        <router-link class="menu-right" to="/combo" href="#home">Combo</router-link>
+        <router-link class="menu-right" to="/product?isSale=true" href="#home">Sale</router-link>
       </nav>
 
       <div class="navbar-icons-main">

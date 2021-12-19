@@ -72,7 +72,7 @@ export default {
   GET_PRODUCT_FOLLOW_CATEGORY: "/api/webtpf/user/products/findproductrelated",
   LIKE_DISLIKE_PRODUCT: "/api/webtpf/user/likeordislike",
   GET_LIST_PRODUCT_LIKE: "/api/webtpf/user/products/findproductlike",
-  
+  GET_LIST_PRODUCT_SALE: "/api/webtpf/user/productsale/getlistsaleproduct",
   
   // card
   ADD_PRODUCT_CARD: "/api/webtpf/user/carts/addcartproduct",

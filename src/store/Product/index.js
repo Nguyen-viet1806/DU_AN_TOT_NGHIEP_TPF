@@ -8,6 +8,7 @@ const state = {
   listProductsChild: [],
   listProductsNew: [],
   listProductsHot: [],
+  listProductSale: [],
 };
 export default {
   namespaced: true,
