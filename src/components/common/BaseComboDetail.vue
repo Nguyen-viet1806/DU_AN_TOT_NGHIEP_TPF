@@ -108,12 +108,17 @@
           </tbody>
         </table>
           </p>
-          <p class="mb-2">
+          <p class="mb-2" v-if="comboDetail.quantity == 0">
+            <span class="badge bg-secondary"
+              >Sản phẩm này đã hết hàng, bạn ghé lại sau nhé !</span
+            >
+          </p>
+          <p class="mb-2" v-if="comboDetail.quantity != 0">
             <button @click="addCard(false)" class="btn-add-card">
               Thêm vào giỏ hàng
             </button>
           </p>
-          <p class="mb-2">
+          <p class="mb-2" v-if="comboDetail.quantity != 0">
             <button @click="addCard(true)" class="btn-pay-now">Mua luôn</button>
           </p>
           <p>

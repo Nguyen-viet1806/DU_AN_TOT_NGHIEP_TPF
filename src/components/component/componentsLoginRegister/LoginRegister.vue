@@ -70,7 +70,7 @@
             </div>
             <div class="input-group">
               <input
-                type="text"
+                type="email"
                 class="form-control"
                 id="validationDefaultUsername"
                 aria-describedby="inputGroupPrepend2"
@@ -110,6 +110,8 @@
                 aria-describedby="inputGroupPrepend2"
                 placeholder="Số điện thoại"
                 v-model="user.phoneNumber"
+                minlength="10"
+                maxlength="11"
                 required
               />
             </div>
@@ -121,6 +123,7 @@
                 aria-describedby="inputGroupPrepend2"
                 placeholder="password"
                 v-model="user.passwordUser"
+                minlength="6"
                 required
               />
             </div>
@@ -132,6 +135,7 @@
                 aria-describedby="inputGroupPrepend2"
                 placeholder="Confirm password"
                 v-model="confirmPassword"
+                minlength="6"
                 required
               />
             </div>
