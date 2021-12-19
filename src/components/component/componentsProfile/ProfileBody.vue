@@ -70,7 +70,7 @@
               <div class="col-md-12">
                 <label class="labels">Số điện thoại</label
                 ><input
-                  type="text"
+                  type="number"
                   class="form-control"
                   placeholder="Số điện thoại"
                   v-model="user.phoneNumber"
@@ -80,11 +80,12 @@
               <div class="col-md-12">
                 <label class="labels">Email</label
                 ><input
-                  type="text"
+                  type="email"
                   class="form-control"
                   placeholder="Email"
                   v-model="user.email"
                   disabled
+                  required
                 />
               </div>
               <h6 class="mt-5">Địa chỉ</h6>
@@ -365,7 +366,7 @@ export default {
       this.user = {
         idUser: users.idUser,
         firstName: users.firstName,
-        lastName: users.firstName,
+        lastName: users.lastName,
         dateOfBirth: users.dateOfBirth,
         email: users.email,
         phoneNumber: users.phoneNumber,
