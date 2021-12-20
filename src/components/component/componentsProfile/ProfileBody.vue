@@ -70,7 +70,8 @@
               <div class="col-md-12">
                 <label class="labels">Số điện thoại</label
                 ><input
-                  type="number"
+                  type="tel"
+                  pattern="[0]{1}[0-9]{9}"
                   class="form-control"
                   placeholder="Số điện thoại"
                   v-model="user.phoneNumber"

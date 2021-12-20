@@ -495,7 +495,7 @@ export default {
 }
 .tag-product {
   position: absolute;
-  font-size: 8px;
+  font-size: 10px;
   right: 0;
   top: -5px;
 }

@@ -104,14 +104,13 @@
             </div>
             <div class="input-group">
               <input
-                type="text"
                 class="form-control"
                 id="validationDefaultUsername"
                 aria-describedby="inputGroupPrepend2"
                 placeholder="Số điện thoại"
                 v-model="user.phoneNumber"
-                minlength="10"
-                maxlength="11"
+                type="tel"
+                pattern="[0]{1}[0-9]{9}"
                 required
               />
             </div>

@@ -121,6 +121,7 @@ export default {
     },
     logout() {
       this.$store.dispatch("loginModule/logout");
+      window.location
     },
   },
 };

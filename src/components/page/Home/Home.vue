@@ -5,7 +5,6 @@
     <shop-flow-gender />
     <base-slide-product v-bind:isShowSlideProductNew="isShowSlideProductNew" />
     <base-category-bottom />
-    <base-news-bottom />
   </section>
 </template>
 
@@ -13,7 +12,6 @@
 import BaseSlideProduct from "@/components/common/BaseSlideProduct.vue";
 import ShopFlowGender from "@/components/component/componentsHome/ShopFlowGender.vue";
 import BaseCategoryBottom from "@/components/common/BaseCategoryBottom.vue";
-import BaseNewsBottom from "@/components/common/BaseNewsBottom.vue";
 import Loading from "@/components/common/Loading.vue";
 export default {
   name: "Home",
@@ -21,7 +19,6 @@ export default {
     BaseSlideProduct,
     ShopFlowGender,
     BaseCategoryBottom,
-    BaseNewsBottom,
     Loading
   },
 

@@ -1,6 +1,6 @@
 import axios from "axios";
-var DOMAIN = "http://192.168.0.102:8888";
-var DOMAINMess = "http://192.168.0.102:8898";
+var DOMAIN = "http://192.168.31.102:8888";
+var DOMAINMess = "http://192.168.31.102:8898";
 import router from "@/router/index.js";
 import { CAC_LOAI_LOI, MESS } from "@/constants/constants";
 

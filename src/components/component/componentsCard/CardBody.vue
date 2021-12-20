@@ -103,11 +103,7 @@
                     +
                   </button>
                 </p>
-                <p
-                  v-if="
-                    card.productDetailDTO.priceSale > 0
-                  "
-                >
+                <p v-if="card.productDetailDTO.priceSale > 0">
                   Tổng:
                   {{
                     new Intl.NumberFormat("de-DE").format(
@@ -115,11 +111,7 @@
                     )
                   }}đ
                 </p>
-                <p
-                  v-if="
-                    card.productDetailDTO.priceSale == 0
-                  "
-                >
+                <p v-if="card.productDetailDTO.priceSale == 0">
                   Tổng:
                   {{
                     new Intl.NumberFormat("de-DE").format(
@@ -201,7 +193,10 @@
       </div>
       <div class="vcol vl-4 vm-4 vc-12">
         <div class="pay">
-          <p>Tổng cộng: {{ ListCard.totalMoney }}đ</p>
+          <p>
+            Tổng cộng:
+            {{ new Intl.NumberFormat("de-DE").format(ListCard.totalMoney) }}đ
+          </p>
           <p>
             <button class="btn-pay mt-2" @click="onClickPay">Thanh toán</button>
             <button @click="onClickGoProduct" class="btn btn-continue mt-2">
