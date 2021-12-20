@@ -11,6 +11,7 @@
         <div id="popupv" v-if="isShowNotifyV" class="popupv">
           <a class="closev" @click="closeNotifyV">&times;</a>
           <div class="contentv">
+            <p v-if="listVoucherUser && listVoucherUser.length == 0">Bạn không có voucher nào !</p>
             <div class="vrow">
               <div
                 v-for="voucher in listVoucherUser"
@@ -126,15 +127,21 @@
             </div>
           </div>
           <p
-            v-if="voucherCanDonate != null && voucherCanDonate != {}"
+            v-if="voucherCanDonate != null && voucherCanDonate.donated != null"
+            class="voucherDonate"
+          >
+            Nếu đơn hàng được thanh toán bạn sẽ được tặng voucher giảm giá {{ voucherCanDonate.donated.discount }}%
+          </p>
+          <p
+            v-if="voucherCanDonate != null && voucherCanDonate.donating != null"
             class="voucherDonate"
           >
             Mua thêm
             {{
               new Intl.NumberFormat("de-DE").format(
-                Number(voucherCanDonate.condition) - Number(ListCard.totalMoney)
+                Number(voucherCanDonate.donating.condition) - Number(ListCard.totalMoney)
               )
-            }}đ để được tặng voucher giảm giá {{ voucherCanDonate.discount }}%
+            }}đ để được tặng voucher giảm giá {{ voucherCanDonate.donating.discount }}%
           </p>
           <div class="pay-voucher">
             <div class="input-group">

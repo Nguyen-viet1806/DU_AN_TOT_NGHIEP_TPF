@@ -436,7 +436,7 @@ export default {
       display: flex;
       padding: 10px 0px 20px;
       & .img-product {
-        width: 150px;
+        width: 180px;
       }
       & .info-product {
         display: flex;
