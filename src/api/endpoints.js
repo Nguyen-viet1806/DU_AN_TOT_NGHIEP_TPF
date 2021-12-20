@@ -58,7 +58,7 @@ export default {
   SEARCH_CATEGORY_CHILD: "/api/webtpf/admin/categories/child/search/",
   FILTER_CATEGORY_CHILD: "/api/webtpf/admin/categories/child/findbystatus/",
   GET_LIST_CATEGORY_CHILD_SORT: "/api/webtpf/admin/categories/child/getallsort",
-  GET_LIST_CATEGORY_CHILD_EXISTS_BY_PARENT: "/api/webtpf/admin/categories/child/findbyparent/",//
+  GET_LIST_CATEGORY_CHILD_EXISTS_BY_PARENT: "/api/webtpf/user/categories/child/findbyparent/",//
 
   //product
   GET_PRODUCT: "/api/webtpf/user/products/showall",
