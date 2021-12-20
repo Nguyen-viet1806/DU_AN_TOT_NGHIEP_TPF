@@ -26,4 +26,4 @@ export const CAC_LOAI_LOI = {
 export const MESS = {
   DANG_XUAT: "DANG_XUAT"
 };
-export const DO_MAIN = "http://localhost:8080";
+export const DO_MAIN = "http://192.168.0.102:8888";

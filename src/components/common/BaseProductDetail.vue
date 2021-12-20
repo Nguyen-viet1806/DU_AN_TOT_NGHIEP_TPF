@@ -135,11 +135,17 @@
                 : productDetail.totalProduct
             }}
           </p>
-          <p class="price mt-1 text-bold" :class="{ 'textGach': productDetail.priceSale && productDetail.priceSale > 0 }">
+          <p
+            class="price mt-1 text-bold"
+            :class="{
+              textGach: productDetail.priceSale && productDetail.priceSale > 0,
+            }"
+          >
             Giá sản phẩm:
             {{
               productDetail.price
-                ? new Intl.NumberFormat("de-DE").format(productDetail.price)
+                ? new Intl.NumberFormat("de-DE").format(productDetail.price) +
+                  "đ"
                 : new Intl.NumberFormat("de-DE").format(
                     productDetail.minPrice
                   ) +
@@ -150,9 +156,12 @@
                   "đ"
             }}
           </p>
-          <p v-if="productDetail.priceSale && productDetail.priceSale > 0" class="price mt-1 text-bold">
+          <p
+            v-if="productDetail.priceSale && productDetail.priceSale > 0"
+            class="price mt-1 text-bold"
+          >
             Giá sale:
-            {{productDetail.priceSale }}
+            {{ productDetail.priceSale }}đ
           </p>
           <p class="mt-1">
             <span class="text-bold">Mô tả : </span
@@ -224,6 +233,7 @@ export default {
       this.getProductDetail();
     },
     colorProduct() {
+      this.productDetail.priceSale = 0;
       if (this.colorProduct !== null) {
         let payload = {
           idProduct: this.productDetail.idProduct,
@@ -280,6 +290,9 @@ export default {
       this.isShowNotify = false;
     },
     getProductDetail() {
+      this.imgSelect = null;
+      this.colorProduct= null;
+      this.sizeProduct= null;
       let payload = {
         idProduct: this.isProductRouter,
       };
@@ -489,7 +502,7 @@ export default {
 .color-size-product {
   position: relative;
 }
-.textGach{
+.textGach {
   text-decoration-line: line-through !important;
 }
 </style>

@@ -632,8 +632,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url("https://fonts.googleapis.com");
-@import url("https://fonts.gstatic.com");
 @import url("https://fonts.googleapis.com/css2?family=Shalimar&display=swap");
 
 .pay {

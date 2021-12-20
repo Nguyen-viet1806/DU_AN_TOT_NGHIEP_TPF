@@ -15,14 +15,20 @@
             {{ infoNotify }}
           </div>
         </div>
-      </transition> 
+      </transition>
     </div>
     <h3 class="title">Giỏ hàng</h3>
     <!-- <a>Tiếp tục mua hàng</a> -->
     <div class="vrow">
       <div class="vcol vl-8 vm-8 vc-12">
         <div class="card">
-          <div class="emty-cart" v-if="ListCard.cartProducts?.length <= 0 && ListCard.cartCombos?.length <= 0">
+          <div
+            class="emty-cart"
+            v-if="
+              ListCard.cartProducts?.length <= 0 &&
+              ListCard.cartCombos?.length <= 0
+            "
+          >
             <img width="600" src="../../../assets/empty-cart.svg" />
           </div>
           <div
@@ -37,6 +43,11 @@
             />
             <div class="info-product">
               <div class="product-quntity">
+                <span
+                  v-if="card.productDetailDTO.listTag?.includes(1)"
+                  class="badge bg-warning text-dark"
+                  >Sale</span
+                >
                 <p>Tên sản phẩm: {{ card.productDetailDTO.nameProduct }}</p>
                 <p>Hàng còn : {{ card.productDetailDTO.amount }}</p>
                 <p>
@@ -47,11 +58,30 @@
                     card.productDetailDTO.colorDTO.nameColor
                   }}
                 </p>
-                <p>
+                <p
+                  :class="{
+                    textGach:
+                      card.productDetailDTO.priceSale &&
+                      card.productDetailDTO.priceSale > 0,
+                  }"
+                >
                   Giá:
                   {{
                     new Intl.NumberFormat("de-DE").format(
                       card.productDetailDTO.price
+                    )
+                  }}đ
+                </p>
+                <p
+                  v-if="
+                    card.productDetailDTO.priceSale &&
+                    card.productDetailDTO.priceSale > 0
+                  "
+                >
+                  Giá sale:
+                  {{
+                    new Intl.NumberFormat("de-DE").format(
+                      card.productDetailDTO.priceSale
                     )
                   }}đ
                 </p>
@@ -73,7 +103,23 @@
                     +
                   </button>
                 </p>
-                <p>
+                <p
+                  v-if="
+                    card.productDetailDTO.priceSale > 0
+                  "
+                >
+                  Tổng:
+                  {{
+                    new Intl.NumberFormat("de-DE").format(
+                      card.productDetailDTO.priceSale * card.quantity
+                    )
+                  }}đ
+                </p>
+                <p
+                  v-if="
+                    card.productDetailDTO.priceSale == 0
+                  "
+                >
                   Tổng:
                   {{
                     new Intl.NumberFormat("de-DE").format(
@@ -108,21 +154,20 @@
                 <p>Hàng còn : {{ card.comboDTO.quantity }}</p>
                 <p>
                   Mô tả :
-                  {{
-                    card.comboDTO.descriptionCombo
-                  }}
+                  {{ card.comboDTO.descriptionCombo }}
                 </p>
                 <p>
                   Giá:
                   {{
-                    new Intl.NumberFormat("de-DE").format(
-                      card.comboDTO.price
-                    )
+                    new Intl.NumberFormat("de-DE").format(card.comboDTO.price)
                   }}đ
                 </p>
                 <p class="mt-5">
                   Số lượng:
-                  <button class="btn-quantity" @click="updateCardCombo(card, 'tru')">
+                  <button
+                    class="btn-quantity"
+                    @click="updateCardCombo(card, 'tru')"
+                  >
                     -
                   </button>
                   <input
@@ -141,9 +186,7 @@
                 <p>
                   Tổng:
                   {{
-                    new Intl.NumberFormat("de-DE").format(
-                      card.comboDTO.price
-                    )
+                    new Intl.NumberFormat("de-DE").format(card.comboDTO.price)
                   }}đ
                 </p>
               </div>
@@ -205,7 +248,10 @@ export default {
       this.getListCard();
     },
     onClickPay() {
-      if (this.ListCard.cartProducts?.length <= 0 && this.ListCard.cartCombos?.length <= 0) {
+      if (
+        this.ListCard.cartProducts?.length <= 0 &&
+        this.ListCard.cartCombos?.length <= 0
+      ) {
         this.isShowNotify = true;
         this.infoNotify = "Bạn không có sản phẩm để mua !";
         setTimeout(() => {
@@ -258,13 +304,15 @@ export default {
     onChangeQuantityCombo(CartDetal) {
       let payload = {
         idCartCombo: CartDetal.idCartCombo,
-          quantity: CartDetal.quantity,
+        quantity: CartDetal.quantity,
       };
-      this.$store.dispatch("comboModule/updateQuantityCartCombo", payload).then((res) => {
-        if (res) {
-          this.getListCard();
-        }
-      });
+      this.$store
+        .dispatch("comboModule/updateQuantityCartCombo", payload)
+        .then((res) => {
+          if (res) {
+            this.getListCard();
+          }
+        });
     },
 
     getListCard() {
@@ -335,7 +383,7 @@ export default {
         });
       }
     },
-      updateCardCombo(CartDetal, action) {
+    updateCardCombo(CartDetal, action) {
       let check = false;
       if (action === "tru") {
         if (CartDetal.quantity > 1) {
@@ -353,11 +401,13 @@ export default {
           idCartCombo: CartDetal.idCartCombo,
           quantity: CartDetal.quantity,
         };
-        this.$store.dispatch("comboModule/updateQuantityCartCombo", payload).then((res) => {
-          if (res) {
-            this.getListCard();
-          }
-        });
+        this.$store
+          .dispatch("comboModule/updateQuantityCartCombo", payload)
+          .then((res) => {
+            if (res) {
+              this.getListCard();
+            }
+          });
       }
     },
     pageNext() {
@@ -461,5 +511,8 @@ export default {
   &:hover {
     width: 100%;
   }
+}
+.textGach {
+  text-decoration-line: line-through !important;
 }
 </style>

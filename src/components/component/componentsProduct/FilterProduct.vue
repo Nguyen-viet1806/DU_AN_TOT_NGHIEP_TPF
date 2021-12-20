@@ -98,24 +98,8 @@ export default {
     ...mapGetters({
       listCategoryParentExists: "categoryModule/getListCategoryParentExists",
     }),
-    isMale() {
-      return this.$route.query.isMale;
-    },
-    isFemale() {
-      return this.$route.query.isFemale;
-    },
   },
   watch: {
-    isMale() {
-      if (this.isMale) {
-        this.idGender = 1;
-      }
-    },
-    isFemale() {
-      if (this.isFemale) {
-        this.idGender = 2;
-      }
-    },
     idCategoryParent() {
       if (this.idCategoryParent > 0) {
         this.isDisabledCategoryChild = false;
@@ -141,17 +125,8 @@ export default {
     search() {
       this.$emit("search", this.textSearch);
     },
-    // sort=&idCategoryParent=&idCategoryChild=&idGender=&minPrice=&maxPrice=&page
-    getProductParentFilter(sort) {
-      let payload = {
-        sort: sort,
-        idCategoryParent: this.idCategoryParent,
-        idCategoryChild: this.idCategoryChild,
-        idGender: this.idGender,
-        minPrice: 0,
-        maxPrice: 1000000000,
-      };
-      this.$emit("getProductParentFilter", payload);
+    getProductParentFilter(sort = -1) {
+      this.$emit("getProductParentFilter", sort);
     },
   },
 };

@@ -16,6 +16,7 @@
       <div class="vrow">
         <div v-if="!isLike && !isSale" class="vcol vl-3 vm-12 vc-12 filter">
           <filter-product
+            ref="FilterProduct"
             @search="search"
             @getProductParentFilter="getProductParentFilter"
           />
@@ -37,7 +38,7 @@
         <div v-else class="vcol vl-9 vm-12 vc-12">
           <product-all
             ref="productAll"
-            @getProductParent="getProductParent"
+            @getProductParent="getProductParentFilter"
             :ListProductsParent="ListProductsParent"
           />
         </div>
@@ -89,25 +90,11 @@ export default {
     initData() {
       this.getCategoryExists();
       if (this.isMale) {
-        this.getProductParentFilter({
-          sort: -1,
-          idCategoryParent: -1,
-          idCategoryChild: -1,
-          idGender: 1,
-          minPrice: 0,
-          maxPrice: 1000000000,
-        });
-        this.$router.push({ path: "/product", query: { isMale: false }  });
+        this.$refs["FilterProduct"].idGender = 1
+        this.getProductParentFilter();
       } else if (this.isFemale) {
-        this.getProductParentFilter({
-          sort: -1,
-          idCategoryParent: -1,
-          idCategoryChild: -1,
-          idGender: 2,
-          minPrice: 0,
-          maxPrice: 1000000000,
-        });
-        this.$router.push({ path: "/product", query: { isFemale: false }  });
+        this.$refs["FilterProduct"].idGender = 2
+        this.getProductParentFilter();
       } else {
         this.getProductParent();
       }
@@ -194,7 +181,7 @@ export default {
       });
     },
 
-    getProductParentFilter(param) {
+    getProductParentFilter(sort = -1) {
       this.$refs["productAll"].isLoading = true;
       let payload = {
         userId:
@@ -202,7 +189,12 @@ export default {
           JSON.parse(localStorage.getItem("UserInfo")).idUser
             ? JSON.parse(localStorage.getItem("UserInfo")).idUser
             : -1,
-        ...param,
+        sort: sort,
+        idCategoryParent: this.$refs["FilterProduct"].idCategoryParent,
+        idCategoryChild: this.$refs["FilterProduct"].idCategoryChild,
+        idGender: this.$refs["FilterProduct"].idGender,
+        minPrice: 0,
+        maxPrice: 1000000000,
         page: this.$refs["productAll"].pageable,
         limit: 9,
       };
