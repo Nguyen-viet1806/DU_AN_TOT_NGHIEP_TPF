@@ -5,7 +5,46 @@ import {
   callApiUpdateProfile,
   callApiChangePassword,
   callApiResetPass,
+  UploadImgMess,
+  SignUpMess,
+  UpdateProfileMess,
 } from "@/api/loginRegister.js";
+
+const uploadImgMess = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    UploadImgMess(payload)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const signUpMess = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    SignUpMess(payload)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const updateProfileMess = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    UpdateProfileMess(payload)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
 
 
 const register = (context, payload) => {
@@ -86,4 +125,7 @@ export default {
   UpdateProfile,
   changePassword,
   resetPass,
+  uploadImgMess,
+  signUpMess,
+  updateProfileMess,
 };

@@ -105,4 +105,8 @@ export default {
   ADD_COMBO: "/api/webtpf/user/carts/addcartcombo",
   UPDATE_COMBO_IN_CART: "/api/webtpf/user/carts/updatecartcombo",
   DELETE_COMBO_IN_CART: "/api/webtpf/user/carts/deletecartcombo",
+
+  UPLOAD_IMG_MESS: "/api/upload",
+  SIGN_ACC_MESS: "/api/user/newUser",
+  UPDATE_PROFILE_MESS: "/api/user/updateUser/",
 };

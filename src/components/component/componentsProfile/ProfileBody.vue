@@ -176,60 +176,60 @@
         </form>
       </div>
       <div class="col-md-4">
-          <div class="p-3 py-5">
-            <form @submit.prevent="changePassword">
-              <div
-                class="
-                  d-flex
-                  justify-content-between
-                  align-items-center
-                  experience
-                "
-              >
-                <span>Đổi mật khẩu</span>
-              </div>
-              <br />
-              <div class="col-md-12">
-                <label class="labels">Mật khẩu cũ</label
-                ><input
-                  type="password"
-                  class="form-control"
-                  placeholder="Mật khẩu cũ"
-                  v-model="passCu"
-                  required
-                />
-              </div>
-              <br />
-              <div class="col-md-12">
-                <label class="labels">Mật khẩu mới</label
-                ><input
-                  type="password"
-                  class="form-control"
-                  placeholder="Mật khẩu mới"
-                  v-model="passMoi"
-                  required
-                />
-              </div>
-              <div class="col-md-12">
-                <label class="labels">Nhập lại mật khẩu mới</label
-                ><input
-                  type="password"
-                  class="form-control"
-                  placeholder="Nhập lại mật khẩu mới"
-                  v-model="passMoiXacNhan"
-                  required
-                />
-              </div>
-              <div class="btn-dpass">
-                <button type="submit">
-                  <span class="border px-3 p-1 add-experience"
-                    ><i class="fa fa-plus"></i>&nbsp;Đổi mật khẩu</span
-                  >
-                </button>
-              </div>
-            </form>
-          </div>
+        <div class="p-3 py-5">
+          <form @submit.prevent="changePassword">
+            <div
+              class="
+                d-flex
+                justify-content-between
+                align-items-center
+                experience
+              "
+            >
+              <span>Đổi mật khẩu</span>
+            </div>
+            <br />
+            <div class="col-md-12">
+              <label class="labels">Mật khẩu cũ</label
+              ><input
+                type="password"
+                class="form-control"
+                placeholder="Mật khẩu cũ"
+                v-model="passCu"
+                required
+              />
+            </div>
+            <br />
+            <div class="col-md-12">
+              <label class="labels">Mật khẩu mới</label
+              ><input
+                type="password"
+                class="form-control"
+                placeholder="Mật khẩu mới"
+                v-model="passMoi"
+                required
+              />
+            </div>
+            <div class="col-md-12">
+              <label class="labels">Nhập lại mật khẩu mới</label
+              ><input
+                type="password"
+                class="form-control"
+                placeholder="Nhập lại mật khẩu mới"
+                v-model="passMoiXacNhan"
+                required
+              />
+            </div>
+            <div class="btn-dpass">
+              <button type="submit">
+                <span class="border px-3 p-1 add-experience"
+                  ><i class="fa fa-plus"></i>&nbsp;Đổi mật khẩu</span
+                >
+              </button>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
     <div class="notify">
       <div
@@ -357,6 +357,9 @@ export default {
       document.documentElement.scrollTop = 900;
       document.body.scrollTop = 0;
     },
+    closeNotify() {
+      this.isShowNotify = false;
+    },
     getInfoUser() {
       if (JSON.parse(localStorage.getItem("UserInfo")) == null) {
         this.$router.push({ path: "/login" });
@@ -383,7 +386,7 @@ export default {
         },
       };
     },
-        changePassword() {
+    changePassword() {
       if (this.passMoi != this.passMoiXacNhan) {
         this.isShowNotify = true;
         this.infoNotify = "Xác nhận mật khẩu mới không khớp!";
@@ -442,6 +445,21 @@ export default {
       });
       return img;
     },
+
+    async uploadFileMess(file) {
+      const fd = new FormData();
+      fd.append("file", file);
+      let img;
+      await this.$store
+        .dispatch("loginModule/uploadImgMess", fd)
+        .then((res) => {
+          if (res) {
+            img = res.data;
+          }
+        });
+      return img;
+    },
+
     async UpdateProfile() {
       if (typeof this.user.imageUser == "object") {
         this.user.imageUser = await this.uploadFile(this.user.imageUser);
@@ -450,12 +468,7 @@ export default {
         .dispatch("loginModule/UpdateProfile", this.user)
         .then((res) => {
           if (res) {
-            this.isShowNotify = true;
-              this.infoNotify = "Lưu thông tin thành công!";
-              setTimeout(() => {
-                this.isShowNotify = false;
-                this.infoNotify = "";
-              }, 1000);
+            this.onUpdateMess();
             localStorage.setItem(
               "UserInfo",
               JSON.stringify({
@@ -464,6 +477,52 @@ export default {
                 idRole: JSON.parse(localStorage.getItem("UserInfo")).idRole,
               })
             );
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            this.isShowNotify = true;
+            this.infoNotify = "Lưu tài khoản thất bại";
+          }
+        });
+    },
+    async onUpdateMess() {
+      let imgMess;
+      let payloadMess;
+      if (typeof this.user.imageUser == "object") {
+        imgMess = await this.uploadFileMess(this.user.imageUser);
+        payloadMess = {
+          nameUser: this.user.firstName + " " + this.user.lastName,
+          imageUser: imgMess,
+          emailUser: this.user.email.trim(),
+          password: "",
+          isAdmin: false,
+        };
+      } else {
+        payloadMess = {
+          nameUser: this.user.firstName + " " + this.user.lastName,
+          imageUser: "",
+          emailUser: this.user.email.trim(),
+          password: "",
+          isAdmin: false,
+        };
+      }
+      this.$store
+        .dispatch("loginModule/updateProfileMess", payloadMess)
+        .then((resMess) => {
+          if (resMess) {
+            this.isShowNotify = true;
+            this.infoNotify = "Lưu thông tin thành công!";
+            setTimeout(() => {
+              this.isShowNotify = false;
+              this.infoNotify = "";
+            }, 1000);
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            this.isShowNotify = true;
+            this.infoNotify = "Lưu tài khoản thất bại";
           }
         });
     },

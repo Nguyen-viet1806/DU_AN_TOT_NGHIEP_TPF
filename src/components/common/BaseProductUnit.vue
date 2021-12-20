@@ -8,8 +8,12 @@
           'background-image: url(' + DO_MAIN + product.frontPhoto + ');',
         ]"
       >
-       <p v-if="product.listTag.includes(1)" class="sale-product"><span class="badge bg-warning text-dark">Sale</span></p>
-        <p v-if="product.listTag.includes(2)" class="sale-product"><span class="badge bg-danger">Hot</span></p>
+        <p v-if="product.listTag.includes(1)" class="sale-product">
+          <span class="badge bg-warning text-dark">Sale</span>
+        </p>
+        <p v-if="product.listTag.includes(2)" class="sale-product">
+          <span class="badge bg-danger">Hot</span>
+        </p>
         <div class="favorite" v-on:click="listDislikeProduct">
           <fa
             v-if="isFavorite"
@@ -26,7 +30,10 @@
       <p class="product-unit-name" @click="onCLickProduct(product.idProduct)">
         {{ product.nameProduct }}
       </p>
-      <p>{{ product.minPrice }}.đồng ~ {{ product.maxPrice }}.đồng</p>
+      <p>
+        {{ new Intl.NumberFormat("de-DE").format(product.minPrice) }}.đồng ~
+        {{ new Intl.NumberFormat("de-DE").format(product.maxPrice) }}.đồng
+      </p>
       <p>
         <fa class="person-favorite" :icon="['fas', 'heart']" /> Đã có
         {{ product.like + (isFavorite ? 1 : 0) }} người thích
@@ -42,7 +49,7 @@
       <p class="product-unit-name" @click="onCLickCombo(combo.idCombo)">
         {{ combo.nameCombo }}
       </p>
-      <p>{{ combo.price }}.đồng</p>
+      <p>{{new Intl.NumberFormat("de-DE").format(combo.price) }}.đồng</p>
     </div>
 
     <div v-if="isShowProductSmallFlowCategory" class="category-bottom-product">
@@ -94,10 +101,8 @@ export default {
       isFavorite: this.product?.isLike,
     };
   },
-  computed: {
-  },
-  watch: {
-  },
+  computed: {},
+  watch: {},
   mounted() {},
   methods: {
     onCLickProduct(idProduct) {
@@ -227,11 +232,11 @@ export default {
     transform: translate(1px, -2px) rotate(-1deg);
   }
 }
-.sale-product{
+.sale-product {
   width: 10%;
   z-index: 998;
 }
-.badge{
+.badge {
   padding: 5px 15px 5px 15px;
 }
 </style>

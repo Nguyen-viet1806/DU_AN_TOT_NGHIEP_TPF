@@ -11,12 +11,12 @@
       </button>
     </p>
     <p>
-      <button class="filter-product-btn" @click="getProductParentFilter(1)">
+      <button class="filter-product-btn" @click="getProductParentFilter(0)">
         Giá thấp nhất
       </button>
     </p>
     <p>
-      <button class="filter-product-btn" @click="getProductParentFilter(0)">
+      <button class="filter-product-btn" @click="getProductParentFilter(1)">
         Giá cao nhất
       </button>
     </p>

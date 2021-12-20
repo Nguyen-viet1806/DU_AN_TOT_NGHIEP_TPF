@@ -23,7 +23,7 @@
           <h5 class="title">Đăng Ký</h5>
           <form @submit.prevent="onRegister" class="row g-3">
             <div class="vrow">
-              <div class="vcol vl-12 vm-12 vc-12 ">
+              <div class="vcol vl-12 vm-12 vc-12">
                 <img
                   class="img-register"
                   width="200"
@@ -229,7 +229,7 @@
                 required
               />
             </div>
-            <div class="input-group">
+            <div class="input-group" v-if="!isReset">
               <input
                 type="password"
                 class="form-control"
@@ -241,9 +241,25 @@
               />
             </div>
             <div class="col-12">
-              <button class="btn btn-pay" type="submit">Đăng nhập</button>
+              <button class="btn btn-pay" type="submit">
+                {{ isReset ? "Gửi mật khẩu về email" : "Đăng nhập" }}
+              </button>
               <p @click="onClickCreateAccount" class="create-account mt-2">
                 Tạo tài khoản
+              </p>
+              <p
+                v-if="!isReset"
+                @click="onClickResetPass"
+                class="create-account mt-2"
+              >
+                Quên mật khẩu
+              </p>
+              <p
+                v-if="isReset"
+                @click="onClickResetPass"
+                class="create-account mt-2"
+              >
+                Đăng nhập
               </p>
             </div>
           </form>
@@ -262,6 +278,7 @@ export default {
   props: {},
   data() {
     return {
+      isReset: false,
       isShowNotify: false,
       infoNotify: "",
       isDisabledDistrict: true,
@@ -441,40 +458,73 @@ export default {
       });
       return img;
     },
-    onLogin() {
-      let payload = {
-        username: this.username,
-        password: this.password,
-      };
-      this.$store
-        .dispatch("loginModule/Login", payload)
+    async uploadFileMess(file) {
+      const fd = new FormData();
+      fd.append("file", file);
+      let img;
+      await this.$store
+        .dispatch("loginModule/uploadImgMess", fd)
         .then((res) => {
           if (res) {
-            this.isShowNotify = true;
-            this.infoNotify = "Đăng nhập thành công";
-            localStorage.setItem("token", res.data.access_token);
-            localStorage.setItem("refresh_token", res.data.refresh_token);
-            localStorage.setItem("UserInfo", JSON.stringify(res.data));
-            HTTP.defaults.headers["Token"] = localStorage.getItem("token");
-            HTTP.defaults.headers["refresh_token"] =
-              localStorage.getItem("refresh_token");
-            if (this.isShowNotify) {
-              setTimeout(this.closeNotify, 1000);
-            }
-            setTimeout(() => {
-              this.$router.push({ path: "/" });
-            }, 1500);
-          }
-        })
-        .catch((err) => {
-          if (err) {
-            this.isShowNotify = true;
-            this.infoNotify = "Sai tài khoản hoặc mật khẩu!!!";
-            if (this.isShowNotify) {
-              setTimeout(this.closeNotify, 1000);
-            }
+            img = res.data;
           }
         });
+      return img;
+    },
+    onLogin() {
+      if (this.isReset) {
+        let payload = {
+          email: this.username,
+        };
+        this.$store
+          .dispatch("loginModule/resetPass", payload)
+          .then((res) => {
+            if (res) {
+              this.isShowNotify = true;
+              this.infoNotify = "Gửi thành công!";
+            }
+          })
+          .catch((err) => {
+            if (err) {
+              this.isShowNotify = true;
+              this.infoNotify = "Tài khoản không tồn tại!";
+            }
+          });
+      } else {
+        let payload = {
+          username: this.username,
+          password: this.password,
+        };
+        this.$store
+          .dispatch("loginModule/Login", payload)
+          .then((res) => {
+            if (res) {
+              this.isShowNotify = true;
+              this.infoNotify = "Đăng nhập thành công";
+              localStorage.setItem("token", res.data.access_token);
+              localStorage.setItem("refresh_token", res.data.refresh_token);
+              localStorage.setItem("UserInfo", JSON.stringify(res.data));
+              HTTP.defaults.headers["Token"] = localStorage.getItem("token");
+              HTTP.defaults.headers["refresh_token"] =
+                localStorage.getItem("refresh_token");
+              if (this.isShowNotify) {
+                setTimeout(this.closeNotify, 1000);
+              }
+              setTimeout(() => {
+                this.$router.push({ path: "/" });
+              }, 1500);
+            }
+          })
+          .catch((err) => {
+            if (err) {
+              this.isShowNotify = true;
+              this.infoNotify = "Sai tài khoản hoặc mật khẩu!!!";
+              if (this.isShowNotify) {
+                setTimeout(this.closeNotify, 1000);
+              }
+            }
+          });
+      }
     },
     async onRegister() {
       if (this.confirmPassword != this.user.passwordUser) {
@@ -485,6 +535,32 @@ export default {
         }
         return;
       }
+      let imgMess;
+      if (typeof this.user.imageUser == "object") {
+        imgMess = await this.uploadFileMess(this.user.imageUser);
+      }
+      let payloadMess = {
+        nameUser: this.user.firstName + " " + this.user.lastName,
+        imageUser: imgMess,
+        emailUser: this.user.email.trim(),
+        password: this.user.passwordUser,
+        isAdmin: false,
+      };
+      this.$store
+        .dispatch("loginModule/signUpMess", payloadMess)
+        .then((resMess) => {
+          if (resMess) {
+            this.onRegisterAcc(resMess.data._id);
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            this.isShowNotify = true;
+            this.infoNotify = "Đăng kí tài khoản thất bại!!!";
+          }
+        });
+    },
+    async onRegisterAcc(idChat) {
       if (typeof this.user.imageUser == "object") {
         this.user.imageUser = await this.uploadFile(this.user.imageUser);
       }
@@ -493,25 +569,42 @@ export default {
         ...this.user,
         email: this.user.email.trim(),
         phoneNumber: this.user.phoneNumber.trim(),
+        idChat: idChat,
       };
-      this.$store.dispatch("loginModule/register", payload).then((res) => {
-        if (res) {
-          this.isShowNotify = true;
-          this.infoNotify = "Đăng kí tài khoản thành công!!!";
-          this.resetForm();
-          setTimeout(() => {
-            this.isShowFormLogin = !this.isShowFormLogin;
-            this.isShowFormRegister = !this.isShowFormRegister;
-          }, 1800);
-          if (this.isShowNotify) {
-            setTimeout(this.closeNotify, 1000);
+      this.$store
+        .dispatch("loginModule/register", payload)
+        .then((res) => {
+          if (res) {
+            this.isShowNotify = true;
+            this.infoNotify = "Đăng kí tài khoản thành công!!!";
+            this.resetForm();
+            setTimeout(() => {
+              this.isShowFormLogin = !this.isShowFormLogin;
+              this.isShowFormRegister = !this.isShowFormRegister;
+            }, 1800);
+            if (this.isShowNotify) {
+              setTimeout(this.closeNotify, 1000);
+            }
           }
-        }
-      });
+        })
+        .catch((err) => {
+          if (err) {
+            this.isShowNotify = true;
+            this.infoNotify = "Đăng kí tài khoản thất bại!!!";
+            setTimeout(() => {
+              this.isShowNotify = false;
+              this.infoNotify = "";
+            }, 1000);
+          }
+        });
     },
     onClickCreateAccount() {
+      this.isReset = false;
       this.isShowFormLogin = !this.isShowFormLogin;
       this.isShowFormRegister = !this.isShowFormRegister;
+    },
+    onClickResetPass() {
+      this.isReset = !this.isReset;
     },
   },
 };

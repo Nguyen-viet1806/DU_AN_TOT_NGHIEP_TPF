@@ -2,7 +2,16 @@
   <div>
     <navbar />
     <banner />
-    <!-- <div class="bchat" ><embed  src="http://localhost:3000/"  width="400px" height="450px"/></div> -->
+    <div v-if="!isShowMess" class="b-incon-chat">
+      <embed src="http://localhost:8998/" width="80px" height="80px" />
+      <div @click="onCLickBoxChat" class="boxChat"></div>
+    </div>
+    <div v-if="isShowMess" class="bchat">
+      <embed src="http://localhost:8998/home" width="400px" height="470px" />
+      <div @click="onCLickBoxChat" class="closeMess">
+        <fa :icon="['fas', 'times']" />
+      </div>
+    </div>
     <router-view />
     <Footer />
   </div>
@@ -16,14 +25,18 @@ export default {
   name: "App",
   components: { Navbar, Banner, Footer },
   props: {},
-  data() {},
+  data() {
+    return {
+      isShowMess: false,
+    };
+  },
   computed: {},
   watch: {},
   mounted() {},
   methods: {
-    test(){
-      console.log(123);
-    }
+    onCLickBoxChat() {
+      this.isShowMess = !this.isShowMess;
+    },
   },
 };
 </script>
@@ -180,7 +193,7 @@ html {
   height: 70vh;
   overflow: auto;
   overflow-x: hidden;
-   &::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     width: 8px;
   }
   &::-webkit-scrollbar-thumb {
@@ -193,11 +206,49 @@ html {
     background: #d4aa70;
   }
 }
-.bchat{
+.bchat {
+  background: white;
+  padding-right: 15px;
+  box-shadow: #b0b7bd 0px 2px 15px 0px;
   position: fixed;
   bottom: 0.8%;
   right: 6%;
   z-index: 100000;
   border-radius: 5px;
+}
+.b-incon-chat {
+  box-shadow: #b0b7bd 0px 2px 15px 0px;
+  position: fixed;
+  bottom: 5%;
+  right: 6%;
+  z-index: 100000;
+  embed {
+  border-radius: 15px;
+  }
+  border-radius: 15px;
+}
+.boxChat {
+  cursor: pointer;
+  width: 80px;
+  height: 80px;
+  position: fixed;
+  bottom: 5%;
+  right: 6%;
+  z-index: 100001;
+  border-radius: 5px;
+  background: transparent;
+}
+.closeMess {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  bottom: 48%;
+  right: 6%;
+  z-index: 100001;
+  border-radius: 5px;
+  &:hover{
+    color: red;
+  }
 }
 </style>
