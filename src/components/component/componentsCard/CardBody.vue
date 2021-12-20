@@ -145,10 +145,6 @@
                 <p>Tên combo: {{ card.comboDTO.nameCombo }}</p>
                 <p>Hàng còn : {{ card.comboDTO.quantity }}</p>
                 <p>
-                  Mô tả :
-                  {{ card.comboDTO.descriptionCombo }}
-                </p>
-                <p>
                   Giá:
                   {{
                     new Intl.NumberFormat("de-DE").format(card.comboDTO.price)
@@ -165,6 +161,7 @@
                   <input
                     class="input-quantity"
                     type="text"
+                    :id="card.idCart"
                     v-model="card.quantity"
                     @change="onChangeQuantityCombo(card)"
                   />
@@ -223,6 +220,7 @@ export default {
       allPrice: 0,
       isShowNotify: false,
       infoNotify: "",
+      ListCardTemp: null,
     };
   },
   computed: {
@@ -270,6 +268,12 @@ export default {
       this.isShowNotify = false;
     },
     onChangeQuantity(CartDetal) {
+      if (CartDetal.quantity <= 0 || isNaN(CartDetal.quantity) || CartDetal.quantity > CartDetal.productDetailDTO.amount) {
+        this.isShowNotify = true;
+        this.infoNotify = "Số lượng không hợp lệ !";
+        this.getListCard();
+        return;
+      }
       let payload = {
         idCartProduct: CartDetal.idCartProduct,
         idCart: CartDetal.idCart,
@@ -297,6 +301,12 @@ export default {
     },
 
     onChangeQuantityCombo(CartDetal) {
+      if (CartDetal.quantity <= 0 || isNaN(CartDetal.quantity) || CartDetal.quantity > CartDetal.comboDTO.quantity) {
+        this.isShowNotify = true;
+        this.infoNotify = "Số lượng không hợp lệ !";
+        this.getListCard();
+        return;
+      }
       let payload = {
         idCartCombo: CartDetal.idCartCombo,
         quantity: CartDetal.quantity,
@@ -316,8 +326,15 @@ export default {
         page: this.pageable,
         limit: 5,
       };
-      this.$store.dispatch("cardModule/getDanhSachCard", payload);
+      this.$store
+        .dispatch("cardModule/getDanhSachCard", payload)
+        .then((res) => {
+          if (res) {
+            this.ListCardTemp = res.data.data;
+          }
+        });
     },
+
     deleteCard(CartDetal) {
       let payload = {
         idCartProduct: CartDetal.idCartProduct,
@@ -350,6 +367,12 @@ export default {
           ++CartDetal.quantity;
           check = true;
         }
+      }
+      if (CartDetal.quantity <= 0 || isNaN(CartDetal.quantity) || CartDetal.quantity > CartDetal.productDetailDTO.amount) {
+        this.isShowNotify = true;
+        this.infoNotify = "Số lượng không hợp lệ !";
+        this.getListCard();
+        return;
       }
       if (check) {
         let payload = {
@@ -390,6 +413,12 @@ export default {
           ++CartDetal.quantity;
           check = true;
         }
+      }
+      if (CartDetal.quantity <= 0 || isNaN(CartDetal.quantity) || CartDetal.quantity > CartDetal.comboDTO.quantity) {
+        this.isShowNotify = true;
+        this.infoNotify = "Số lượng không hợp lệ !";
+        this.getListCard();
+        return;
       }
       if (check) {
         let payload = {
@@ -473,9 +502,10 @@ export default {
 .delete-product {
   padding: 5px;
   color: black;
+  transform: scale(1.5);
   background: transparent;
   &:hover {
-    transform: scale(2);
+    transform: scale(3);
   }
 }
 .btn-pay {

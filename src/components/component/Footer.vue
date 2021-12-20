@@ -35,7 +35,6 @@
         <h5>Newsletter</h5>
         <br />
         <p>
-          <input type="email" placeholder="Your email" /><button>Send</button>
         </p>
         <br />
         <h5>Follow</h5>

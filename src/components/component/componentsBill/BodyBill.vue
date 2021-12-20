@@ -48,7 +48,7 @@
               Đã hủy
             </h6>
           </div>
-          <div class="search-bill">
+          <!-- <div class="search-bill">
             <input
               class="filter-product-search"
               type="text"
@@ -57,7 +57,8 @@
             /><button class="filter-product-btn-filter" @click="search">
               Search
             </button>
-          </div>
+          </div> -->
+          <p v-if="listBill.length == 0" class="emty-bill">Bạn không có hóa đơn nào ở trạng thái này!</p>
           <div class="bill-page">
             <div class="bill-page-unit" v-for="bill in listBill" :key="bill">
               <div class="top-bill">
@@ -455,5 +456,9 @@ export default {
 }
 .closev{
   cursor: pointer;
+}
+.emty-bill{
+  text-align: center;
+  font-size: 20px;
 }
 </style>
