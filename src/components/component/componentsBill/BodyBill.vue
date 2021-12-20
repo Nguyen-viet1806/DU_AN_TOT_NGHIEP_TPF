@@ -58,7 +58,9 @@
               Search
             </button>
           </div> -->
-          <p v-if="listBill.length == 0" class="emty-bill">Bạn không có hóa đơn nào ở trạng thái này!</p>
+          <p v-if="listBill.length == 0" class="emty-bill">
+            Bạn không có hóa đơn nào ở trạng thái này!
+          </p>
           <div class="bill-page">
             <div class="bill-page-unit" v-for="bill in listBill" :key="bill">
               <div class="top-bill">
@@ -124,9 +126,7 @@
                 >
                   <img
                     class="img-product"
-                    :src="
-                      DO_MAIN + billDetail.comboResponseDTO.frontPhoto
-                    "
+                    :src="DO_MAIN + billDetail.comboResponseDTO.frontPhoto"
                     alt=""
                   />
                   <div class="info-product">
@@ -172,6 +172,9 @@
               <div class="all-price-in-bill mt-2">
                 <button @click="onClickShow(bill)" class="btn btn-show">
                   Xem chi tiết
+                </button>
+                <button v-if="bill.idStatus == GIA_TRI_TRANG_THAI.PROCESSING" @click="showConfirmSave(bill)" class="btn btn-cancel">
+                  Hủy hóa đơn
                 </button>
               </div>
             </div>
@@ -219,26 +222,54 @@
       ></div>
       <transition name="bounce">
         <div id="popupv" v-if="isShowNotifyV" class="popupv">
-          <a class="closev"  @click="closeNotifyV">&times;</a>
+          <a class="closev" @click="closeNotifyV">&times;</a>
           <div class="contentv">
-            <show-detail-bill ref="ShowDetailBill" :bill="billTemp"/>
+            <show-detail-bill ref="ShowDetailBill" :bill="billTemp" />
           </div>
         </div>
       </transition>
     </div>
+    <div class="notify">
+      <div
+        id="popup1"
+        v-if="isShowNotify"
+        class="overlay"
+        @click="closeNotify"
+      ></div>
+      <transition name="bounce">
+        <div id="popup1" v-if="isShowNotify" class="popup">
+          <h2>Thông báo:</h2>
+          <a class="close" href="#" @click="closeNotify">&times;</a>
+          <div class="content">
+            {{ infoNotify }}
+          </div>
+        </div>
+      </transition>
+    </div>
+    <base-confirm
+      :isShowConfirm="isShowConfirm"
+      :infoConfirm="infoConfirm"
+      @closeConfirm="closeConfirm"
+      @oke="cancelBill"
+    />
   </div>
 </template>
 
 <script>
+import BaseConfirm from "@/components/common/BaseConfirm.vue";
 import { DO_MAIN, GIA_TRI_TRANG_THAI } from "@/constants/constants";
 import { mapGetters } from "vuex";
 import ShowDetailBill from "@/components/component/componentsPay/ShowDetailBill.vue";
 export default {
   name: "BodyBill",
-  components: { ShowDetailBill },
+  components: { ShowDetailBill, BaseConfirm },
   props: {},
   data() {
     return {
+      isShowNotify: false,
+      infoNotify: "",
+      infoConfirm: "",
+      isShowConfirm: false,
       DO_MAIN,
       GIA_TRI_TRANG_THAI,
       innerText: "Tất cả",
@@ -246,6 +277,7 @@ export default {
       idStatus: GIA_TRI_TRANG_THAI.ALL,
       isShowNotifyV: false,
       billTemp: {},
+      billSelect: null,
     };
   },
   computed: {
@@ -269,8 +301,40 @@ export default {
     initData() {
       this.getAllBill();
     },
+    closeConfirm() {
+      this.isShowConfirm = false;
+      this.infoConfirm = "";
+      this.billSelect = null;
+    },
+    showConfirmSave(bill) {
+      this.billSelect = bill;
+      this.isShowConfirm = true;
+      this.infoConfirm = "Mời bạn nhập lý do hủy hóa đơn :";
+    },
+    closeNotify() {
+      this.isShowNotify = false;
+    },
+    cancelBill(lyDo) {
+      let payload = {
+        idBill: this.billSelect.idBill,
+        reason: lyDo,
+      };
+      this.$store.dispatch("billModule/huyBill", payload).then((res) => {
+        if (res) {
+          this.isShowNotify = true;
+          this.infoNotify = "Hủy hóa đơn thành công";
+          setTimeout(this.closeNotify, 1000);
+          this.closeConfirm();
+          if (this.idStatus == GIA_TRI_TRANG_THAI.ALL) {
+            this.getAllBill();
+          } else {
+            this.getListBillInStatus(this.idStatus);
+          }
+        }
+      });
+    },
     onClickShow(billTemp) {
-      this.billTemp = billTemp ;
+      this.billTemp = billTemp;
       this.isShowNotifyV = true;
     },
     closeNotifyV() {
@@ -454,10 +518,21 @@ export default {
     background: #ee4d2d;
   }
 }
-.closev{
+.btn-cancel {
+  margin-left: 5px;
+  border: 1px solid black;
+  color: black;
+  outline: 0;
+  margin-bottom: 5px;
+  &:hover {
+    color: white;
+    background: black;
+  }
+}
+.closev {
   cursor: pointer;
 }
-.emty-bill{
+.emty-bill {
   text-align: center;
   font-size: 20px;
 }

@@ -52,7 +52,7 @@ export function callApiHuyBill(payload) {
   return HTTP({
     url: ENDPOINT.HUY_BILL,
     method: "POST",
-    data: payload
+    params: payload
   });
 }
 
