@@ -20,7 +20,7 @@
             @getProductParentFilter="getProductParentFilter"
           />
         </div>
-         <div v-if="isLike" class="vcol vl-o-2 vl-8 vm-12 vc-12">
+        <div v-if="isLike" class="vcol vl-o-2 vl-8 vm-12 vc-12">
           <product-all
             ref="productAll"
             @getProductParent="getProductParent"
@@ -67,6 +67,12 @@ export default {
     isSale() {
       return this.$route.query.isSale;
     },
+    isMale() {
+      return this.$route.query.isMale;
+    },
+    isFemale() {
+      return this.$route.query.isFemale;
+    },
   },
   watch: {
     isLike() {
@@ -81,8 +87,32 @@ export default {
   },
   methods: {
     initData() {
-      this.getProductParent();
       this.getCategoryExists();
+      if (this.isMale) {
+        this.getProductParentFilter({
+          sort: -1,
+          idCategoryParent: -1,
+          idCategoryChild: -1,
+          idGender: 1,
+          minPrice: 0,
+          maxPrice: 1000000000,
+        });
+        this.$router.push({ path: "/product", query: { isMale: false }  });
+      } else if (this.isFemale) {
+        this.getProductParentFilter({
+          sort: -1,
+          idCategoryParent: -1,
+          idCategoryChild: -1,
+          idGender: 2,
+          minPrice: 0,
+          maxPrice: 1000000000,
+        });
+        this.$router.push({ path: "/product", query: { isFemale: false }  });
+      } else {
+        this.getProductParent();
+      }
+      document.documentElement.scrollTop = 900;
+      document.body.scrollTop = 0;
     },
 
     getCategoryExists() {
@@ -126,7 +156,6 @@ export default {
             }
           });
       } else {
-        console.log(1231231231231231231238888);
         let payload = {
           userId:
             JSON.parse(localStorage.getItem("UserInfo")) &&

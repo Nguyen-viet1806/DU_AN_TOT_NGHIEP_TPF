@@ -10,8 +10,16 @@
         Search
       </button>
     </p>
-    <p><button class="filter-product-btn" @click="getProductParentFilter(1)">Giá thấp nhất</button></p>
-    <p><button class="filter-product-btn" @click="getProductParentFilter(0)">Giá cao nhất</button></p>
+    <p>
+      <button class="filter-product-btn" @click="getProductParentFilter(1)">
+        Giá thấp nhất
+      </button>
+    </p>
+    <p>
+      <button class="filter-product-btn" @click="getProductParentFilter(0)">
+        Giá cao nhất
+      </button>
+    </p>
     <ul class="filter-product-unit">
       <li class="filter-product-unit-menu">
         <select
@@ -59,7 +67,14 @@
         </select>
       </li>
     </ul>
-    <p><button class="filter-product-btn-filter" @click="getProductParentFilter(-1)">Filter Product</button></p>
+    <p>
+      <button
+        class="filter-product-btn-filter"
+        @click="getProductParentFilter(-1)"
+      >
+        Filter Product
+      </button>
+    </p>
   </div>
 </template>
 
@@ -83,8 +98,24 @@ export default {
     ...mapGetters({
       listCategoryParentExists: "categoryModule/getListCategoryParentExists",
     }),
+    isMale() {
+      return this.$route.query.isMale;
+    },
+    isFemale() {
+      return this.$route.query.isFemale;
+    },
   },
   watch: {
+    isMale() {
+      if (this.isMale) {
+        this.idGender = 1;
+      }
+    },
+    isFemale() {
+      if (this.isFemale) {
+        this.idGender = 2;
+      }
+    },
     idCategoryParent() {
       if (this.idCategoryParent > 0) {
         this.isDisabledCategoryChild = false;

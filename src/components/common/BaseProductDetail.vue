@@ -64,17 +64,17 @@
             <span class="badge bg-danger">Hot</span>
           </p>
           <h4 class="title">{{ productDetail.nameProduct }}</h4>
-          <p class="like">
+          <p class="like text-bold">
             <fa class="person-favorite" :icon="['fas', 'heart']" /> Đã có
             {{ productDetail.like }}
             người thích
           </p>
-          <div class="color mt-2">
+          <div class="color mt-2 text-bold">
             Màu:
             <div v-for="color in productDetail.listColor" :key="color">
               <label
                 :for="color.nameColor"
-                class="btn-color"
+                class="btn-color "
                 :class="{ active: colorProduct === color.idColor }"
                 >{{ color.nameColor }}</label
               >
@@ -87,7 +87,7 @@
               />
             </div>
           </div>
-          <div class="size mt-2">
+          <div class="size mt-2 text-bold">
             Size:
             <div v-for="size in listSize" :key="size">
               <label
@@ -106,7 +106,7 @@
               />
             </div>
           </div>
-          <p class="mt-1">
+          <p class="mt-1 text-bold">
             Hàng còn:
             {{
               productDetail.amount || productDetail.amount == 0
@@ -114,7 +114,7 @@
                 : productDetail.totalProduct
             }}
           </p>
-          <p class="price mt-1">
+          <p class="price mt-1 text-bold">
             Giá sản phẩm:
             {{
               productDetail.price
@@ -122,7 +122,7 @@
                 : productDetail.minPrice + "đ ~ " + productDetail.maxPrice + "đ"
             }}
           </p>
-          <p class="mt-1">Mô tả : {{ productDetail.descriptionProduct }}</p>
+          <p class="mt-1"><span class="text-bold">Mô tả : </span>{{ productDetail.descriptionProduct }}</p>
 
           <!-- <p class="mt-1">
             Số lượng mua: <button class="btn-quantity">-</button>
@@ -432,5 +432,8 @@ export default {
 .active {
   border: 1px solid red;
   color: red;
+}
+.text-bold{
+  font-weight: bold;
 }
 </style>

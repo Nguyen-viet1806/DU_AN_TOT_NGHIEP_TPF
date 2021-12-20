@@ -2,21 +2,21 @@
   <div>
     <div class="navbar" id="scoll-navbar">
       <div class="navbar-icons">
-        <a href="#" class="navbar-icons-logo"
+        <a href="https://www.facebook.com/profile.php?id=100013753158039" target="_blank " class="navbar-icons-logo"
           ><fa :icon="['fab', 'facebook']"
         /></a>
-        <a href="#" class="navbar-icons-logo"
+        <a href="https://twitter.com/vietnq1806" target="_blank " class="navbar-icons-logo"
           ><fa :icon="['fab', 'twitter']"
         /></a>
-        <a href="#" class="navbar-icons-logo"
+        <a href="#" target="_blank " class="navbar-icons-logo"
           ><fa :icon="['fab', 'youtube']"
         /></a>
-        <a href="#" class="navbar-icons-logo"
-          ><fa :icon="['fab', 'github']"
+        <a href="https://www.instagram.com/nqvvietsunny/" target="_blank " class="navbar-icons-logo"
+          ><fa :icon="['fab', 'instagram']"
         /></a>
-        <a href="#home" class="navbar-icons-logo" id="logo-main"
+        <router-link to="/" href="#home" class="navbar-icons-logo" id="logo-main"
           ><img class="icon" src="@/assets/logoTpf.svg" width="45" height="45"
-        /></a>
+        /></router-link>
       </div>
 
       <nav class="navbar-menu" id="menu-bars">

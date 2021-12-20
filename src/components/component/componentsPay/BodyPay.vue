@@ -12,18 +12,36 @@
           <a class="closev" @click="closeNotifyV">&times;</a>
           <div class="contentv">
             <div class="vrow">
-              <div class="vcol vl-6 vm-6 vc-12">
-                <div class="voucher">
-                  <img
-                    class="icon"
-                    src="@/assets/logoTpf.svg"
-                    width="45"
-                    height="45"
-                  />
-                  <p>Voucher <fa :icon="['fas', 'tags']" /> giảm giá 10%</p>
-                  <p class="btn-addVoucher">
-                    <button class="btn btn-danger">Chọn voucher</button>
-                  </p>
+              <div
+                v-for="voucher in listVoucherUser"
+                :key="voucher"
+                class="vcol vl-12 vm-12 vc-12"
+              >
+                <div @click="onClickSelectVoucher(voucher)" class="one">
+                  <h1 class="info">{{ voucher.discount }}%</h1>
+                  <div class="back">
+                    <span
+                      style="
+                        font-weight: bold;
+                        font-size: 40px;
+                        font-family: 'Shalimar', cursive;
+                      "
+                      >Localbrand TPF</span
+                    >
+                    <span
+                      style="
+                        font-weight: bold;
+                        font-size: 30px;
+                        font-family: 'Shalimar', cursive;
+                      "
+                      >Gift voucher</span
+                    >
+                    <span
+                      style="font-size: 20px; font-family: 'Lobster', cursive"
+                      >Code: {{ voucher.codeVoucher }}</span
+                    >
+                    <div class="quantityVoucher">Số lượng : {{voucher.quantity}}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -140,7 +158,16 @@
               <p class="mt-1">Vận chuyển:</p>
             </div>
             <div class="value">
-              <p>
+              <p v-if="voucherSelect">
+                {{
+                  new Intl.NumberFormat("de-DE").format(
+                    ListCard.totalMoney -
+                      ListCard.totalMoney * (voucherSelect.discount / 100)
+                  )
+                }}
+                ₫
+              </p>
+              <p v-if="!voucherSelect">
                 {{ new Intl.NumberFormat("de-DE").format(ListCard.totalMoney) }}
                 ₫
               </p>
@@ -152,7 +179,17 @@
               <p>Tổng :</p>
             </div>
             <div class="value">
-              <p>
+              <p v-if="voucherSelect">
+                {{
+                  new Intl.NumberFormat("de-DE").format(
+                    ListCard.totalMoney -
+                      ListCard.totalMoney * (voucherSelect.discount / 100) +
+                      30000
+                  )
+                }}
+                ₫
+              </p>
+              <p v-if="!voucherSelect">
                 {{
                   new Intl.NumberFormat("de-DE").format(
                     ListCard.totalMoney + 30000
@@ -306,6 +343,7 @@ export default {
       DO_MAIN,
       voucherCanDonate: {},
       voucher: "",
+      voucherSelect: null,
       listProvince: [],
       listDistrict: [],
       listCommune: [],
@@ -329,6 +367,11 @@ export default {
     }),
   },
   watch: {
+    voucher() {
+      this.voucherSelect = this.listVoucherUser.filter(
+        (item) => item.codeVoucher == this.voucher
+      )[0];
+    },
     isSuDungThongTinDaluu() {
       if (this.isSuDungThongTinDaluu) {
         let user = JSON.parse(localStorage.getItem("UserInfo"));
@@ -395,6 +438,10 @@ export default {
       document.body.scrollTop = 0;
       this.getListCard();
       this.getListTinh();
+    },
+    onClickSelectVoucher(voucher) {
+      this.voucher = voucher.codeVoucher;
+      this.isShowNotifyV = false;
     },
     closeNotifyV() {
       this.isShowNotifyV = false;
@@ -511,7 +558,7 @@ export default {
         deposit: 0,
         payment: this.allPrice,
         transportFee: 30000,
-        voucher: this.voucher,
+        codeVoucher: this.voucher,
         billType: 0,
         idStatus: 6,
         listProductDetail: [...listProductTemp],
@@ -563,6 +610,8 @@ export default {
                   this.detailAddress = null;
                   this.phoneUser = "";
                   this.emailUser = "";
+                  this.voucher = "";
+                  this.voucherSelect = null;
                 }
               });
           }
@@ -583,6 +632,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import url("https://fonts.googleapis.com");
+@import url("https://fonts.gstatic.com");
+@import url("https://fonts.googleapis.com/css2?family=Shalimar&display=swap");
+
 .pay {
   padding-left: 2%;
   padding-right: 2%;
@@ -711,5 +764,62 @@ export default {
 .btn-addVoucher {
   margin-top: 10px;
   text-align: center;
+}
+.one {
+  cursor: pointer;
+  margin-top: 10px;
+  font-family: "Courier New", Courier, monospace;
+  color: black;
+  border: 5px double black;
+  height: 150px;
+  max-width: 500px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(
+    221.15deg,
+    #bd8727 0%,
+    #ffd574 49.02%,
+    #feca50 62.02%,
+    #bd8727 101.47%
+  );
+  &:hover {
+    color: red;
+    animation: anicolor 1s ease-in-out infinite;
+  }
+}
+.info {
+  border-right: 1px dotted black;
+  width: 30%;
+  height: 100%;
+  display: flex;
+  font-size: 60px;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+.back {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 30px;
+}
+.popupv {
+  padding-right: 80px;
+}
+@keyframes anicolor {
+  0% {
+    border: 5px double rgb(247, 45, 45);
+  }
+  50% {
+    border: 5px double rgb(252, 152, 2);
+  }
+  100% {
+    border: 5px double rgb(244, 247, 45);
+  }
 }
 </style>
