@@ -71,10 +71,19 @@
           </p>
           <div class="color mt-2 text-bold">
             Màu:
-            <div v-for="color in productDetail.listColor" :key="color">
+            <div
+              v-for="color in productDetail.listColor"
+              :key="color"
+              class="color-size-product"
+            >
+              <span
+                v-if="listColorSale.includes(color.idColor)"
+                class="badge bg-warning text-dark tag-product"
+                >Sale</span
+              >
               <label
                 :for="color.nameColor"
-                class="btn-color "
+                class="btn-color"
                 :class="{ active: colorProduct === color.idColor }"
                 >{{ color.nameColor }}</label
               >
@@ -89,7 +98,19 @@
           </div>
           <div class="size mt-2 text-bold">
             Size:
-            <div v-for="size in listSize" :key="size">
+            <div
+              v-for="size in listSize"
+              :key="size"
+              class="color-size-product"
+            >
+              <span
+                v-if="
+                  listSizeSale.includes(size.sizeDTO.idSize) &&
+                  listColorSale.includes(colorProduct)
+                "
+                class="badge bg-warning text-dark tag-product"
+                >Sale</span
+              >
               <label
                 :for="size.sizeDTO.nameSize"
                 class="btn-size mt-1"
@@ -114,15 +135,29 @@
                 : productDetail.totalProduct
             }}
           </p>
-          <p class="price mt-1 text-bold">
+          <p class="price mt-1 text-bold" :class="{ 'textGach': productDetail.priceSale && productDetail.priceSale > 0 }">
             Giá sản phẩm:
             {{
               productDetail.price
-                ? productDetail.price
-                : productDetail.minPrice + "đ ~ " + productDetail.maxPrice + "đ"
+                ? new Intl.NumberFormat("de-DE").format(productDetail.price)
+                : new Intl.NumberFormat("de-DE").format(
+                    productDetail.minPrice
+                  ) +
+                  "đ ~ " +
+                  new Intl.NumberFormat("de-DE").format(
+                    productDetail.maxPrice
+                  ) +
+                  "đ"
             }}
           </p>
-          <p class="mt-1"><span class="text-bold">Mô tả : </span>{{ productDetail.descriptionProduct }}</p>
+          <p v-if="productDetail.priceSale && productDetail.priceSale > 0" class="price mt-1 text-bold">
+            Giá sale:
+            {{productDetail.priceSale }}
+          </p>
+          <p class="mt-1">
+            <span class="text-bold">Mô tả : </span
+            >{{ productDetail.descriptionProduct }}
+          </p>
 
           <!-- <p class="mt-1">
             Số lượng mua: <button class="btn-quantity">-</button>
@@ -169,6 +204,8 @@ export default {
       DO_MAIN,
       productDetail: {},
       listSize: [],
+      listColorSale: [],
+      listSizeSale: [],
       colorProduct: null,
       sizeProduct: null,
       imgSelect: null,
@@ -226,6 +263,7 @@ export default {
               this.productDetail.amount = res.data.data.amount;
               this.productDetail.idProductDetail =
                 res.data.data.idProductDetail;
+                this.productDetail.priceSale =  res.data.data.priceSale
             }
           });
       }
@@ -253,12 +291,16 @@ export default {
             document.body.scrollTop = 0;
             this.productDetail = res.data.data;
             this.getListProductWithCategory();
+            this.listColorSale = res.data.data.listColorSale;
+            this.listSizeSale = res.data.data.listSizeSale;
           }
         });
     },
     onClickGoProduct() {
       document.documentElement.scrollTop = 900;
       document.body.scrollTop = 0;
+      this.listColorSale = [];
+      this.listSizeSale = [];
       this.$router.push({ path: "/product" });
     },
     getListProductWithCategory() {
@@ -301,6 +343,8 @@ export default {
             this.getProductDetail();
           }
           if (paynow) {
+            this.listColorSale = [];
+            this.listSizeSale = [];
             setTimeout(() => {
               this.$router.push({ path: "/card" });
             }, 1800);
@@ -433,7 +477,19 @@ export default {
   border: 1px solid red;
   color: red;
 }
-.text-bold{
+.text-bold {
   font-weight: bold;
+}
+.tag-product {
+  position: absolute;
+  font-size: 8px;
+  right: 0;
+  top: -5px;
+}
+.color-size-product {
+  position: relative;
+}
+.textGach{
+  text-decoration-line: line-through !important;
 }
 </style>
