@@ -278,6 +278,7 @@ export default {
         idGender: "",
         idAddress: null,
         imageUser: "",
+        idChat: "",
         addressRequestDTO: {
           idAddress: null,
           idProvince: "",
@@ -375,6 +376,7 @@ export default {
         email: users.email,
         phoneNumber: users.phoneNumber,
         passwordUser: "",
+        idChat: users.idChat,
         idGender: users.genderDTO?.idGender,
         idAddress: null,
         imageUser: users.imageUser,
@@ -493,19 +495,25 @@ export default {
       if (typeof this.user.imageUser == "object") {
         imgMess = await this.uploadFileMess(this.user.imageUser);
         payloadMess = {
-          nameUser: this.user.firstName + " " + this.user.lastName,
-          imageUser: imgMess,
-          emailUser: this.user.email.trim(),
-          password: "",
-          isAdmin: false,
+          userId: this.user.idChat,
+          data: {
+            nameUser: this.user.firstName + " " + this.user.lastName,
+            imageUser: imgMess,
+            emailUser: this.user.email.trim(),
+            password: "",
+            isAdmin: false,
+          },
         };
       } else {
         payloadMess = {
-          nameUser: this.user.firstName + " " + this.user.lastName,
-          imageUser: "",
-          emailUser: this.user.email.trim(),
-          password: "",
-          isAdmin: false,
+          userId: this.user.idChat,
+          data: {
+            nameUser: this.user.firstName + " " + this.user.lastName,
+            imageUser: "",
+            emailUser: this.user.email.trim(),
+            password: "",
+            isAdmin: false,
+          },
         };
       }
       this.$store
