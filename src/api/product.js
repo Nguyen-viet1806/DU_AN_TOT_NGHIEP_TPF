@@ -96,3 +96,11 @@ export function callApiGetListProductSale(payload) {
     params: payload,
   });
 }
+
+export function callApiGetListProductFooter(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_PRODUCT_FOOTER,
+    method: "GET",
+    params: payload,
+  });
+}

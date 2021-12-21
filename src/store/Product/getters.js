@@ -10,6 +10,8 @@ const getListProductsHot = (state) => state.listProductsHot;
 
 const getListProductsSale = (state) => state.listProductSale;
 
+const getListProductsFt = (state) => state.listProductFooter;
+
 export default {
   getListProductsParent,
   getListProductsChild,
@@ -17,4 +19,5 @@ export default {
   getListProductsHot,
   getListProductsParentLike,
   getListProductsSale,
+  getListProductsFt,
 };

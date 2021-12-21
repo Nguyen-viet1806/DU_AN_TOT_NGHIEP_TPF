@@ -9,6 +9,7 @@ const state = {
   listProductsNew: [],
   listProductsHot: [],
   listProductSale: [],
+  listProductFooter: {},
 };
 export default {
   namespaced: true,

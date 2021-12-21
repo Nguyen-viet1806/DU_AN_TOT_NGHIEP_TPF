@@ -39,8 +39,16 @@ export default {
     initData() {
       this.getListProductNew();
       this.getListProductHot();
+      this.getListProductFooter()
       document.documentElement.scrollTop = 900;
       document.body.scrollTop = 0;
+    },
+    getListProductFooter(){
+     let payload = {
+       limit: 3,
+       userId: JSON.parse(localStorage.getItem("UserInfo")) && JSON.parse(localStorage.getItem("UserInfo")).idUser ? JSON.parse(localStorage.getItem("UserInfo")).idUser :  -1
+     }
+     this.$store.dispatch("productModule/getListProductFooter",payload)
     },
     getListProductHot() {
       this.isLoading = true

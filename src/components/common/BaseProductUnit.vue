@@ -52,17 +52,17 @@
       <p>{{new Intl.NumberFormat("de-DE").format(combo.price) }}.đồng</p>
     </div>
 
-    <div v-if="isShowProductSmallFlowCategory" class="category-bottom-product">
+    <div v-if="isShowProductSmallFlowCategory" @click="onCLickProduct(productFT.idProduct)" class="category-bottom-product">
       <div class="img-product">
         <img
-          src="https://d3f86pfw66amx.cloudfront.net/uncode/wp-content/uploads/2020/05/product-snow-20b-min-300x400.jpg"
+          :src="DO_MAIN + productFT.frontPhoto"
           width="40"
         />
       </div>
       <p class="name-product">
-        Swash Multicolor
+        {{productFT.nameProduct}}
         <br />
-        <small>690đ</small>
+        <small>{{new Intl.NumberFormat("de-DE").format(productFT.minPrice)}}đ ~ {{new Intl.NumberFormat("de-DE").format(productFT.maxPrice)}}đ</small>
       </p>
     </div>
   </div>
@@ -83,6 +83,10 @@ export default {
       default: false,
     },
     product: {
+      type: Object,
+      default: () => {},
+    },
+    productFT: {
       type: Object,
       default: () => {},
     },
@@ -187,14 +191,17 @@ export default {
   color: red;
 }
 .category-bottom-product {
+  cursor: pointer;
   margin: 10px 0 10px 0;
   display: flex;
   padding: 0 2% 0 2%;
   & .name-product {
-    cursor: pointer;
     font-weight: 500;
     text-decoration: none;
     margin-left: 5px;
+  }
+  &:hover{
+    color: red;
   }
 }
 @keyframes shake {

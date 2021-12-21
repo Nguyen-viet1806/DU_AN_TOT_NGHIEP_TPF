@@ -109,4 +109,6 @@ export default {
   UPLOAD_IMG_MESS: "/api/upload",
   SIGN_ACC_MESS: "/api/user/newUser",
   UPDATE_PROFILE_MESS: "/api/user/updateUser/",
+
+  GET_PRODUCT_FOOTER: "/api/webtpf/user/products/findproductfooter",
 };
