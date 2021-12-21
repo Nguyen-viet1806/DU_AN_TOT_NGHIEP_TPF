@@ -594,6 +594,7 @@ export default {
               idGender: users.genderDTO.idGender,
               idAddress: null,
               imageUser: users.imageUser,
+              idRole: 3,
               addressRequestDTO: {
                 idAddress: this.idAddress,
                 idProvince: this.idProvince,
@@ -602,6 +603,7 @@ export default {
                 detailAddress: this.detailAddress,
               },
             };
+            localStorage.setItem("UserInfo", JSON.stringify(userTemp));
             this.$store
               .dispatch("loginModule/UpdateProfile", userTemp)
               .then((res) => {
